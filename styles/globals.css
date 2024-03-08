@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: "Clash Display";
+  src: url("/fonts/ClashDisplay-Regular.woff2") format("woff2"),
+    url("/fonts/ClashDisplay-Regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 @layer utilities {
   /* This targets the scrollbar track */
   .scrollbar::-webkit-scrollbar {

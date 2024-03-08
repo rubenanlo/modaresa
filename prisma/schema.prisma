@@ -1,0 +1,52 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+// schema.prisma
+
+// Define the database connection
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Define the Prisma Client generator
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Define the Vendor model
+model Vendor {
+  id          Int          @id @default(autoincrement())
+  name        String
+  appointments Appointment[] // Add the opposite relation field
+}
+
+// Define the Buyer model
+model Buyer {
+  id          Int          @id @default(autoincrement())
+  name        String
+  companyName String
+  appointments Appointment[]
+}
+
+// Define the Appointment model
+model Appointment {
+  id        Int       @id @default(autoincrement())
+  title     String
+  type      Type
+  location  String?
+  startTime DateTime
+  endTime   DateTime
+  vendor    Vendor    @relation(fields: [vendorId], references: [id])
+  buyer     Buyer     @relation(fields: [buyerId], references: [id])
+  vendorId  Int
+  buyerId   Int
+}
+
+// Define the AppointmentType enum
+enum Type {
+  VIRTUAL
+  PHYSICAL
+}
