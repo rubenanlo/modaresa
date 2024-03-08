@@ -6,7 +6,7 @@ module.exports = {
   ],
   theme: {
     fontFamily: {
-      montserrat: ["Montserrat", "sans-serif"],
+      clash: ["Clash Display", "sans-serif"],
     },
     extend: {
       screens: {
