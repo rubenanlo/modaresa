@@ -22,6 +22,10 @@ module.exports = {
     react: {
       version: "detect",
     },
+    "import/resolver": {
+      // Tells ESLint to use the TypeScript resolver
+      typescript: {}, // No need for any specific configuration options
+    },
   },
   plugins: ["react", "no-only-tests"],
   rules: { "no-only-tests/no-only-tests": "error" },
