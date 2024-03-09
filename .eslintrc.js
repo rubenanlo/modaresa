@@ -13,6 +13,7 @@ module.exports = {
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
+      tsx: true,
     },
     ecmaVersion: 12,
     sourceType: "module",
@@ -20,6 +21,10 @@ module.exports = {
   settings: {
     react: {
       version: "detect",
+    },
+    "import/resolver": {
+      // Tells ESLint to use the TypeScript resolver
+      typescript: {}, // No need for any specific configuration options
     },
   },
   plugins: ["react", "no-only-tests"],

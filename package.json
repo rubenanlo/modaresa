@@ -34,13 +34,15 @@
   "devDependencies": {
     "@babel/core": "^7.17.9",
     "@babel/preset-env": "^7.16.11",
-    "@types/react": "18.2.64",
+    "@types/node": "^20.11.25",
+    "@types/react": "^18.2.64",
     "autoprefixer": "^10.4.13",
     "babel-loader": "^8.2.3",
     "babel-plugin-module-resolver": "^4.1.0",
     "eslint": "^8.30.0",
     "eslint-config-next": "^13.0.7",
     "eslint-config-prettier": "^8.8.0",
+    "eslint-import-resolver-typescript": "^3.6.1",
     "eslint-plugin-no-only-tests": "^3.1.0",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.2",
@@ -49,10 +51,11 @@
     "prisma": "^5.10.2",
     "sharp": "^0.32.6",
     "tailwindcss": "^3.2.4",
+    "typescript": "^5.4.2",
     "webpack": "^5.88.2"
   },
   "lint-staged": {
-    "*.js": "eslint --fix",
+    "*.{js, ts, tsx}": "eslint --fix",
     "*.{js,jsx,ts,tsx,css,md}": "prettier --write"
   }
 }
