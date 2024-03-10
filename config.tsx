@@ -4,7 +4,7 @@
 export const TITLE = "";
 
 // The favicon
-export const ICON = "static/assets/logo.svg";
+export const ICON = "static/assets/logo.webp";
 
 // The URL of the deployed page (used in meta tags for SMO)
 // Example: https://www.domain.com/

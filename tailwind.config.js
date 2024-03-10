@@ -18,13 +18,14 @@ module.exports = {
       },
       colors: {
         blue: {
-          primary: "#133457",
-          secondary: "#c7e7f3",
-          fable: "#04203D",
+          primary: "#8173FE",
+          secondary: "#EFEFFF",
         },
         green: {
-          primary: "#00A675",
-          secondary: "#104f55",
+          primary: "#A7FBC2",
+        },
+        gray: {
+          primary: "#F0F0F0",
         },
       },
     },
