@@ -55,7 +55,7 @@ const AppLayout = ({ children }) => {
         </Container.Flex>
       </Container.Flex>
 
-      <Container className="lg:pl-72 h-screen border">
+      <Container className="lg:pl-72 h-full">
         <Hero />
         <Container className="lg:px-10 max-w-6xl mx-auto">{children}</Container>
       </Container>

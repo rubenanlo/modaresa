@@ -25,6 +25,8 @@ const Index = () => {
           .map((appointment) => {
             return {
               ...appointment,
+              vendorName: appointment.vendor.name,
+              buyerName: appointment.buyer.name,
               time: `${dayjs(appointment.startTime).format(
                 "MMMM D, YYYY h:mm A"
               )} - ${dayjs(appointment.endTime).format("h:mm A")}`,
@@ -42,27 +44,28 @@ const Index = () => {
   }, []); // Empty dependency array ensures the effect runs only once when the component mounts
 
   const nextAppointment = appointments[0];
+  const remainingAppointments = appointments.slice(1);
 
   return isLoading ? null : (
     <AppLayout>
       <Container
         className={{
-          dimension: "-mt-5 my-20",
+          dimension: "lg:-mt-5 my-20 lg:max-w-4xl",
           background: "bg-white",
           border: "px-5 py-10 rounded-sm shadow-md shadow-blue-primary",
         }}
       >
         <TextLayout.Title title="Up Next" />
-        <Container.Columns
+        <Container.Flex
           className={{
-            grid: "grid-cols-2",
+            position: "mt-0",
           }}
         >
           <UpNext nextAppointment={nextAppointment} />
           <NewAppointment />
-        </Container.Columns>
+        </Container.Flex>
       </Container>
-      <AppointmentList appointments={appointments} />
+      <AppointmentList appointments={remainingAppointments} />
     </AppLayout>
   );
 };
