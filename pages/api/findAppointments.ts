@@ -9,8 +9,21 @@ export default async function handler(
 ) {
   if (req.method === "GET") {
     try {
-      // Retrieve all appointments
-      const appointments = await prisma.appointment.findMany();
+      // Retrieve all appointments along with buyerName and vendorName
+      const appointments = await prisma.appointment.findMany({
+        include: {
+          buyer: {
+            select: {
+              name: true,
+            },
+          },
+          vendor: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      });
 
       res.status(200).json({ appointments });
     } catch (error) {
