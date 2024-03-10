@@ -13,14 +13,17 @@ interface UpNextProps {
 
 const UpNext: React.FC<UpNextProps> = ({ nextAppointment }: UpNextProps) => {
   return (
-    <Container className="mt-10">
-      <TextLayout.Title as="h3" title={nextAppointment?.title} />
-      <TextLayout.Paragraph paragraph={nextAppointment?.time} />
-      <Container className="w-10 border-b my-2" />
+    <Container.Flex
+      className={{ dimension: "h-52", flex: "flex-col justify-center gap-y-2" }}
+    >
+      <Container>
+        <TextLayout.Title as="h3" title={nextAppointment?.title} />
+        <TextLayout.Paragraph paragraph={nextAppointment?.time} />
+      </Container>
+      <Container className="w-10 border-b" />
       <Container className="italic">
         <TextLayout.Paragraph
           paragraph={`Type of appointment: ${nextAppointment?.type}`}
-          className="mt-2"
         />
         {nextAppointment?.type === "PHYSICAL" && (
           <TextLayout.Paragraph
@@ -28,7 +31,16 @@ const UpNext: React.FC<UpNextProps> = ({ nextAppointment }: UpNextProps) => {
           />
         )}
       </Container>
-    </Container>
+      <Container className="w-10 border-b" />
+      <Container className="font-bold">
+        <TextLayout.Paragraph
+          paragraph={`Vendor: ${nextAppointment?.vendorName}`}
+        />
+        <TextLayout.Paragraph
+          paragraph={`Buyer: ${nextAppointment?.buyerName}`}
+        />
+      </Container>
+    </Container.Flex>
   );
 };
 

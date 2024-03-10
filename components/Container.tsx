@@ -97,7 +97,8 @@ Container.Flex = function ContainerFlexProps({
       className={clsx(
         classNameProp,
         "flex",
-        className?.flex === undefined && "flex-row justify-between items-center"
+        className?.flex === undefined &&
+          "flex-row justify-between items-center flex-wrap"
       )}
       {...props}
     >

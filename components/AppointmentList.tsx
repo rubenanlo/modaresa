@@ -2,14 +2,17 @@ const Index = ({ appointments }) => {
   return (
     <div className=" text-2xl border">
       {/* Render appointments */}
-      {appointments.map(({ title, id, startTime, endTime, vendorId }) => (
-        <>
-          <div key={id}>{title}</div>
-          <div>{startTime}</div>
-          <div>{endTime}</div>
-          <div>{vendorId}</div>
-        </>
-      ))}
+      {appointments.map(
+        ({ title, id, startTime, endTime, buyerName, vendorName }) => (
+          <>
+            <div key={id}>{title}</div>
+            <div>{startTime}</div>
+            <div>{endTime}</div>
+            <div>{buyerName}</div>
+            <div>{vendorName}</div>
+          </>
+        )
+      )}
     </div>
   );
 };
