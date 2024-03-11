@@ -11,6 +11,7 @@ const Index = () => {
   const [appointments, setAppointments] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [refreshTrigger, setRefreshTrigger] = useState(0); // State variable to trigger refresh
+  const [isFormOpen, setIsFormOpen] = useState(false);
 
   useEffect(() => {
     console.log(appointments);
@@ -69,11 +70,18 @@ const Index = () => {
           }}
         >
           <UpNext nextAppointment={nextAppointment} />
-          <NewAppointment onAppointmentAdded={refreshAppointments} />{" "}
+          <NewAppointment
+            state={{ isFormOpen, setIsFormOpen }}
+            onAppointmentAdded={refreshAppointments}
+          />{" "}
           {/* Pass refresh function as prop */}
         </Container.Flex>
       </Container>
-      <AppointmentList appointments={remainingAppointments} />
+      <AppointmentList
+        isFormOpen={isFormOpen}
+        setIsFormOpen={setIsFormOpen}
+        appointments={remainingAppointments}
+      />
     </AppLayout>
   );
 };

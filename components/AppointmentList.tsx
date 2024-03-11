@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { AppointmentActions } from "./AppointmentActions";
 import AppointmentForm from "./AppointmentForm";
 import { Button } from "./Button";
@@ -18,9 +19,22 @@ interface Appointment {
 
 interface Props {
   appointments: Appointment[];
+  isFormOpen: boolean;
+  setIsFormOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const AppointmentList: React.FC<Props> = ({ appointments }) => {
+const AppointmentList: React.FC<Props> = ({
+  appointments,
+  isFormOpen,
+  setIsFormOpen,
+}) => {
+  const [initialData, setInitialData] = useState<Appointment | null>(null);
+
+  const handleUpdate = (appointment: Appointment) => {
+    setInitialData(appointment);
+    setIsFormOpen(true);
+  };
+
   return (
     <Container.Columns className={{ dimension: "h-full", grid: "grid-cols-2" }}>
       {/* Render appointments */}
@@ -42,23 +56,32 @@ const AppointmentList: React.FC<Props> = ({ appointments }) => {
               flex: "flex-col justify-center gap-y-2 my-10",
             }}
           >
-            {/* <AppointmentForm
-              initialFormData={{
-                title,
-                type,
-                id,
-                location,
-                time,
-                startTime,
-                endTime,
-                buyerName,
-                vendorName,
-              }}
-            /> */}
+            {isFormOpen && initialData && (
+              <AppointmentForm
+                initialFormData={initialData}
+                setIsFormOpen={setIsFormOpen}
+                setInitialData={setInitialData}
+              />
+            )}
+
             <Container>
               <Container.Flex className={{ flex: "justify-start gap-x-3" }}>
                 <TextLayout.Title as="h3" title={title} />
-                <Button>
+                <Button
+                  onClick={() =>
+                    handleUpdate({
+                      id,
+                      title,
+                      type,
+                      location,
+                      time,
+                      startTime,
+                      endTime,
+                      buyerName,
+                      vendorName,
+                    })
+                  }
+                >
                   <AppointmentActions className="h-5 w-5" />
                 </Button>
               </Container.Flex>

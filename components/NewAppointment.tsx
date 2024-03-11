@@ -3,8 +3,10 @@ import { PlusIcon } from "./PlusIcon";
 import { Button } from "./Button";
 import AppointmentForm from "./AppointmentForm";
 
-const NewAppointment = ({ onAppointmentAdded }) => {
-  const [isFormOpen, setIsFormOpen] = useState(false);
+const NewAppointment = ({
+  onAppointmentAdded,
+  state: { isFormOpen, setIsFormOpen },
+}) => {
   return (
     <>
       <Button

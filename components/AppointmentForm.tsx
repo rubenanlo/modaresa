@@ -21,16 +21,24 @@ interface AppointmentFormProps {
   setIsFormOpen: React.Dispatch<React.SetStateAction<boolean>>;
   initialFormData?: FormResponse; // Add initialFormData prop to receive data for update
   onAppointmentAdded: () => void; // Define callback function prop
+  setInitialData: React.Dispatch<React.SetStateAction<FormResponse | null>>; // Add setInitialData prop
 }
 
 const AppointmentForm: React.FC<AppointmentFormProps> = ({
   setIsFormOpen,
   initialFormData,
   onAppointmentAdded, // Define callback function prop
+  setInitialData,
 }) => {
   const [formResponse, setFormResponse] = useState<FormResponse>(
     initialFormData || {}
   ); // Set initial form data if provided
+
+  const handleCancel = () => {
+    setFormResponse({}); // Reset form response
+    setIsFormOpen(false);
+    setInitialData && setInitialData(null); // Reset initial data
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -379,7 +387,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
           <button
             type="button"
             className="text-sm font-semibold leading-6 text-gray-900"
-            onClick={() => setIsFormOpen(false)}
+            onClick={handleCancel}
           >
             Cancel
           </button>
