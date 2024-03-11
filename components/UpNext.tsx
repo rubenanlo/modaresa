@@ -22,7 +22,7 @@ const UpNext: React.FC<UpNextProps> = ({ nextAppointment }: UpNextProps) => {
     >
       <Container>
         <TextLayout.Title as="h3" title={nextAppointment.title} />
-        <TextLayout.Paragraph paragraph={nextAppointment.startTime} />
+        <TextLayout.Paragraph paragraph={nextAppointment.time} />
       </Container>
       <Container className="w-10 border-b" />
       <Container className="italic">

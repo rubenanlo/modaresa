@@ -5,18 +5,19 @@ import UpNext from "../components/UpNext";
 import { Container } from "../components/Container";
 import NewAppointment from "../components/NewAppointment";
 import TextLayout from "../components/TextLayout";
-import Hero from "../components/Hero";
 import dayjs from "dayjs";
 
 const Index = () => {
   const [appointments, setAppointments] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [refreshTrigger, setRefreshTrigger] = useState(0); // State variable to trigger refresh
 
   useEffect(() => {
+    console.log(appointments);
     // Fetch appointments data from the API endpoint
     const fetchAppointments = async () => {
       try {
-        const response = await fetch("/api/findAppointments"); // Adjust the API endpoint URL as needed
+        const response = await fetch("/api/find-appointments"); // Adjust the API endpoint URL as needed
         if (!response.ok) {
           throw new Error("Failed to fetch appointments");
         }
@@ -41,10 +42,16 @@ const Index = () => {
     };
 
     fetchAppointments();
-  }, []); // Empty dependency array ensures the effect runs only once when the component mounts
+  }, [refreshTrigger]); // Add refreshTrigger to the dependency array
 
   const nextAppointment = appointments[0];
   const remainingAppointments = appointments.slice(1);
+
+  // Function to refresh appointments
+  const refreshAppointments = () => {
+    // Increment refreshTrigger to trigger useEffect
+    setRefreshTrigger((prevTrigger) => prevTrigger + 1);
+  };
 
   return isLoading ? null : (
     <AppLayout>
@@ -62,7 +69,8 @@ const Index = () => {
           }}
         >
           <UpNext nextAppointment={nextAppointment} />
-          <NewAppointment />
+          <NewAppointment onAppointmentAdded={refreshAppointments} />{" "}
+          {/* Pass refresh function as prop */}
         </Container.Flex>
       </Container>
       <AppointmentList appointments={remainingAppointments} />

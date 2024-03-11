@@ -1,3 +1,6 @@
+import { AppointmentActions } from "./AppointmentActions";
+import AppointmentForm from "./AppointmentForm";
+import { Button } from "./Button";
 import { Container } from "./Container";
 import TextLayout from "./TextLayout";
 
@@ -9,6 +12,8 @@ interface Appointment {
   time: string;
   buyerName: string;
   vendorName: string;
+  startTime: string;
+  endTime: string;
 }
 
 interface Props {
@@ -20,15 +25,43 @@ const AppointmentList: React.FC<Props> = ({ appointments }) => {
     <Container.Columns className={{ dimension: "h-full", grid: "grid-cols-2" }}>
       {/* Render appointments */}
       {appointments.map(
-        ({ title, id, type, location, time, buyerName, vendorName }) => (
+        ({
+          title,
+          id,
+          type,
+          location,
+          time,
+          startTime,
+          endTime,
+          buyerName,
+          vendorName,
+        }) => (
           <Container.Flex
             key={id}
             className={{
               flex: "flex-col justify-center gap-y-2 my-10",
             }}
           >
+            {/* <AppointmentForm
+              initialFormData={{
+                title,
+                type,
+                id,
+                location,
+                time,
+                startTime,
+                endTime,
+                buyerName,
+                vendorName,
+              }}
+            /> */}
             <Container>
-              <TextLayout.Title as="h3" title={title} />
+              <Container.Flex className={{ flex: "justify-start gap-x-3" }}>
+                <TextLayout.Title as="h3" title={title} />
+                <Button>
+                  <AppointmentActions className="h-5 w-5" />
+                </Button>
+              </Container.Flex>
               <TextLayout.Paragraph paragraph={time} />
             </Container>
             <Container className="w-10 border-b" />

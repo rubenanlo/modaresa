@@ -55,7 +55,7 @@ const AppLayout = ({ children }) => {
         </Container.Flex>
       </Container.Flex>
 
-      <Container className="lg:pl-72 h-full">
+      <Container className="lg:pl-72 h-screen overflow-y-auto scrollbar">
         <Hero />
         <Container className="lg:px-10 max-w-6xl mx-auto">{children}</Container>
       </Container>

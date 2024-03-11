@@ -1,7 +1,10 @@
 import { Container } from "./Container";
 import { useState } from "react";
+import { PlusIcon } from "./PlusIcon";
+import { Button } from "./Button";
 
 interface FormResponse {
+  appointmentId?: string; // Add appointmentId to the FormResponse interface
   vendorName?: string;
   buyerName?: string;
   companyName?: string;
@@ -16,35 +19,64 @@ interface FormResponse {
 
 interface AppointmentFormProps {
   setIsFormOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  initialFormData?: FormResponse; // Add initialFormData prop to receive data for update
+  onAppointmentAdded: () => void; // Define callback function prop
 }
 
-const AppointmentForm: React.FC<AppointmentFormProps> = ({ setIsFormOpen }) => {
-  const [formResponse, setFormResponse] = useState<FormResponse>({});
+const AppointmentForm: React.FC<AppointmentFormProps> = ({
+  setIsFormOpen,
+  initialFormData,
+  onAppointmentAdded, // Define callback function prop
+}) => {
+  const [formResponse, setFormResponse] = useState<FormResponse>(
+    initialFormData || {}
+  ); // Set initial form data if provided
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const response = await fetch("/api/createAppointment", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formResponse),
-    });
-    const data = await response.json();
-    if (data.error) {
-      alert(data.error);
-      return;
+    const method = formResponse.appointmentId ? "PUT" : "POST"; // Determine method based on the presence of appointmentId
+    const url = formResponse.appointmentId
+      ? `/api/update-appointment`
+      : `/api/create-appointment`; // Set endpoint based on method
+
+    try {
+      const response = await fetch(url, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formResponse),
+      });
+      const data = await response.json();
+      if (data.error) {
+        alert(data.error);
+        return;
+      }
+      setFormResponse({});
+      setIsFormOpen(false);
+      onAppointmentAdded(); // Call callback function prop
+    } catch (error) {
+      console.error(error);
+      alert("An error occurred while saving the appointment.");
     }
-    setFormResponse({});
-    setIsFormOpen(false);
   };
 
   return (
-    <Container className="absolute top-0 left-0 h-screen w-screen z-50 bg-gray-300 flex justify-center items-center">
+    <Container className="absolute top-0 left-0 h-screen w-screen z-50 bg-green-primary flex justify-center items-center">
       <form
-        className="h-2/4 w-[50vw] overflow-hidden hover:overflow-y-auto bg-white p-20 rounded-lg scrollbar"
+        className="relative h-2/4 overflow-hidden overflow-y-auto bg-white p-20 rounded-lg scrollbar shadow-xl shadow-blue-primary"
         onSubmit={(e) => handleSubmit(e)}
       >
+        <Button
+          className={{
+            dimension: "h-10 w-10",
+            position: "rotate-45 absolute -ml-16 -mt-16",
+            background: "text-blue-primary",
+          }}
+          onClick={() => setIsFormOpen(false)}
+        >
+          <PlusIcon />
+        </Button>
         <div className="space-y-12 w-[40vw]">
           <div className="border-b border-gray-900/10 pb-12">
             <h2 className="text-base font-semibold leading-7 text-gray-900">
@@ -65,12 +97,13 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({ setIsFormOpen }) => {
                     Vendor
                   </label>
                   <div className="mt-2">
-                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-blue-primary sm:max-w-md">
                       <input
                         type="text"
                         name="vendorName"
                         id="vendorName"
                         autoComplete="vendorName"
+                        value={formResponse.vendorName || ""}
                         className="block flex-1 border-0 bg-transparent py-1.5 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                         placeholder="Name"
                         onChange={(e) =>
@@ -94,7 +127,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({ setIsFormOpen }) => {
                     Buyer
                   </label>
                   <div className="mt-2">
-                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-blue-primary sm:max-w-md">
                       <input
                         type="text"
                         name="buyerName"
@@ -112,7 +145,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({ setIsFormOpen }) => {
                     </div>
                   </div>
                   <div className="mt-2">
-                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-blue-primary sm:max-w-md">
                       <input
                         type="text"
                         name="companyName"
@@ -156,7 +189,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({ setIsFormOpen }) => {
                       },
                     })
                   }
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-primary sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
@@ -173,7 +206,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({ setIsFormOpen }) => {
                     Starting date & time
                   </label>
                   <div className="mt-2">
-                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-blue-primary sm:max-w-md">
                       <input
                         type="datetime-local"
                         name="startDate"
@@ -205,7 +238,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({ setIsFormOpen }) => {
                     Ending date & time
                   </label>
                   <div className="mt-2">
-                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-blue-primary sm:max-w-md">
                       <input
                         type="datetime-local"
                         name="endTime"
@@ -258,7 +291,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({ setIsFormOpen }) => {
                         name="physical"
                         type="checkbox"
                         value="PHYSICAL"
-                        className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                        className="h-4 w-4 rounded border-gray-300 text-blue-primary focus:ring-blue-primary"
                         onChange={(e) =>
                           setFormResponse({
                             ...formResponse,
@@ -286,7 +319,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({ setIsFormOpen }) => {
                         name="virtual"
                         type="checkbox"
                         value="VIRTUAL"
-                        className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                        className="h-4 w-4 rounded border-gray-300 text-blue-primary focus:ring-blue-primary"
                         onChange={(e) =>
                           setFormResponse({
                             ...formResponse,
@@ -333,7 +366,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({ setIsFormOpen }) => {
                         },
                       })
                     }
-                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-primary sm:text-sm sm:leading-6"
                   />
                 </div>
               </div>
@@ -352,7 +385,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({ setIsFormOpen }) => {
           </button>
           <button
             type="submit"
-            className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            className="rounded-md bg-blue-primary px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-primary/70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-primary"
           >
             Save
           </button>
