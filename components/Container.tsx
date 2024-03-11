@@ -200,7 +200,10 @@ Container.List = function ContainerList({
       className={clsx(classNamePropParent, "leading-6")}
     >
       {list.map((item) => (
-        <ChildComponent key={item.id} className={clsx(classNamePropChild)}>
+        <ChildComponent
+          key={item.id || item.name}
+          className={clsx(classNamePropChild)}
+        >
           {AdditionalComponent ? (
             <AdditionalComponent
               href={item.href || ""}
