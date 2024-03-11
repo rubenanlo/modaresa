@@ -12,9 +12,9 @@ const Index = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [refreshTrigger, setRefreshTrigger] = useState(0); // State variable to trigger refresh
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [initialData, setInitialData] = useState<Appointment | null>(null);
 
   useEffect(() => {
-    console.log(appointments);
     // Fetch appointments data from the API endpoint
     const fetchAppointments = async () => {
       try {
@@ -23,6 +23,7 @@ const Index = () => {
           throw new Error("Failed to fetch appointments");
         }
         const data = await response.json();
+        console.log(data);
         const formattedData = data.appointments
           .map((appointment) => {
             return {
@@ -37,6 +38,7 @@ const Index = () => {
           .sort((a, b) => b.startTime - a.startTime);
         setAppointments(formattedData);
         setIsLoading(false);
+        setInitialData(null);
       } catch (error) {
         console.error("Error fetching appointments:", error);
       }
@@ -46,7 +48,6 @@ const Index = () => {
   }, [refreshTrigger]); // Add refreshTrigger to the dependency array
 
   const nextAppointment = appointments[0];
-  const remainingAppointments = appointments.slice(1);
 
   // Function to refresh appointments
   const refreshAppointments = () => {
@@ -78,9 +79,11 @@ const Index = () => {
         </Container.Flex>
       </Container>
       <AppointmentList
+        initialData={initialData}
+        setInitialData={setInitialData}
         isFormOpen={isFormOpen}
         setIsFormOpen={setIsFormOpen}
-        appointments={remainingAppointments}
+        appointments={appointments}
       />
     </AppLayout>
   );

@@ -23,7 +23,7 @@ export default async function handler(
       const buyer = await prisma.buyer.create({
         data: {
           name: buyerName,
-          companyName: companyName,
+          companyName,
         },
       });
 

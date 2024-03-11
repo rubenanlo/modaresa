@@ -2,6 +2,7 @@ import { Container } from "./Container";
 import { useState } from "react";
 import { PlusIcon } from "./PlusIcon";
 import { Button } from "./Button";
+import clsx from "clsx";
 
 interface FormResponse {
   appointmentId?: string; // Add appointmentId to the FormResponse interface
@@ -33,6 +34,8 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
   const [formResponse, setFormResponse] = useState<FormResponse>(
     initialFormData || {}
   ); // Set initial form data if provided
+
+  console.log(formResponse);
 
   const handleCancel = () => {
     setFormResponse({}); // Reset form response
@@ -81,7 +84,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
             position: "rotate-45 absolute -ml-16 -mt-16",
             background: "text-blue-primary",
           }}
-          onClick={() => setIsFormOpen(false)}
+          onClick={handleCancel}
         >
           <PlusIcon />
         </Button>
@@ -140,6 +143,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                         type="text"
                         name="buyerName"
                         id="buyerName"
+                        value={formResponse.buyerName || ""}
                         autoComplete="buyerName"
                         className="block flex-1 border-0 bg-transparent py-1.5 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                         placeholder="Name"
@@ -158,6 +162,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                         type="text"
                         name="companyName"
                         id="companyName"
+                        value={formResponse.companyName || ""}
                         autoComplete="companyName"
                         className="block flex-1 border-0 bg-transparent py-1.5 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                         placeholder="Company name"
@@ -187,6 +192,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                   type="text"
                   name="title"
                   id="title"
+                  value={formResponse.title}
                   placeholder="Include the title of the appointment"
                   onChange={(e) =>
                     setFormResponse({
@@ -219,6 +225,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                         type="datetime-local"
                         name="startDate"
                         id="startDate"
+                        value={formResponse.startTime}
                         autoComplete="startDate"
                         className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                         placeholder="Name"
@@ -251,6 +258,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                         type="datetime-local"
                         name="endTime"
                         id="endTime"
+                        value={formResponse.endTime}
                         autoComplete="endTime"
                         className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                         placeholder="Name"
@@ -295,11 +303,19 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                   <div className="relative flex gap-x-3">
                     <div className="flex h-6 items-center">
                       <input
-                        id="physical"
-                        name="physical"
-                        type="checkbox"
+                        id="PHYSICAL"
+                        name="type"
+                        type="radio"
                         value="PHYSICAL"
-                        className="h-4 w-4 rounded border-gray-300 text-blue-primary focus:ring-blue-primary"
+                        checked={
+                          initialFormData && formResponse.type === "PHYSICAL"
+                        }
+                        className={clsx(
+                          formResponse.type === "PHYSICAL"
+                            ? "ring-2 ring-inset ring-blue-primary"
+                            : "border-gray-300",
+                          "h-4 w-4 rounded border-gray-300 text-blue-primary focus:ring-blue-primary"
+                        )}
                         onChange={(e) =>
                           setFormResponse({
                             ...formResponse,
@@ -324,10 +340,18 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                     <div className="flex h-6 items-center">
                       <input
                         id="virtual"
-                        name="virtual"
-                        type="checkbox"
+                        name="type"
+                        type="radio"
                         value="VIRTUAL"
-                        className="h-4 w-4 rounded border-gray-300 text-blue-primary focus:ring-blue-primary"
+                        checked={
+                          initialFormData && formResponse.type === "VIRTUAL"
+                        }
+                        className={clsx(
+                          formResponse.type === "PHYSICAL"
+                            ? "ring-2 ring-inset ring-blue-primary"
+                            : "border-gray-300",
+                          "h-4 w-4 rounded border-gray-300 text-blue-primary focus:ring-blue-primary"
+                        )}
                         onChange={(e) =>
                           setFormResponse({
                             ...formResponse,
