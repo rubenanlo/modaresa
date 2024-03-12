@@ -1,8 +1,9 @@
-import { Container } from "./Container";
 import { useState } from "react";
+import clsx from "clsx";
+import { Container } from "./Container";
 import { PlusIcon } from "./PlusIcon";
 import { Button } from "./Button";
-import clsx from "clsx";
+import { useDataStore } from "../providers/dataStore";
 
 interface FormResponse {
   appointmentId?: string; // Add appointmentId to the FormResponse interface
@@ -21,19 +22,19 @@ interface FormResponse {
 interface AppointmentFormProps {
   setIsFormOpen: React.Dispatch<React.SetStateAction<boolean>>;
   initialFormData?: FormResponse; // Add initialFormData prop to receive data for update
-  onAppointmentAdded: () => void; // Define callback function prop
   setInitialData: React.Dispatch<React.SetStateAction<FormResponse | null>>; // Add setInitialData prop
 }
 
 const AppointmentForm: React.FC<AppointmentFormProps> = ({
   setIsFormOpen,
   initialFormData,
-  onAppointmentAdded, // Define callback function prop
   setInitialData,
 }) => {
+  const { setRefreshTrigger } = useDataStore(); // Get the setRefreshTrigger function from the data store
+
   const [formResponse, setFormResponse] = useState<FormResponse>(
     initialFormData || {}
-  ); // Set initial form data if provided
+  ); // Set initial form data if provided for appointment updates
 
   const handleCancel = () => {
     setFormResponse({}); // Reset form response
@@ -63,7 +64,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
       }
       setFormResponse({});
       setIsFormOpen(false);
-      onAppointmentAdded(); // Call callback function prop
+      setRefreshTrigger((prev) => !prev); // Trigger refresh by toggling refreshTrigger
     } catch (error) {
       console.error(error);
       alert("An error occurred while saving the appointment.");
@@ -191,7 +192,8 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                   type="text"
                   name="title"
                   id="title"
-                  value={formResponse.title}
+                  value={formResponse.title || ""}
+                  autoComplete="title"
                   placeholder="Include the title of the appointment"
                   onChange={(e) =>
                     setFormResponse({

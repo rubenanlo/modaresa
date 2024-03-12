@@ -41,7 +41,7 @@ const UpNext: React.FC<UpNextProps> = ({ nextAppointment }: UpNextProps) => {
           paragraph={`Vendor: ${nextAppointment.vendorName}`}
         />
         <TextLayout.Paragraph
-          paragraph={`Buyer: ${nextAppointment.buyerName}`}
+          paragraph={`Buyer: ${nextAppointment.buyerName} | ${nextAppointment.companyName}`}
         />
       </Container>
     </Container.Flex>

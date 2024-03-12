@@ -1,59 +1,45 @@
 import { useEffect, useState } from "react";
+import { URL as url } from "../config";
 import AppLayout from "../components/AppLayout";
 import AppointmentList from "../components/AppointmentList";
 import UpNext from "../components/UpNext";
 import { Container } from "../components/Container";
 import NewAppointment from "../components/NewAppointment";
 import TextLayout from "../components/TextLayout";
-import dayjs from "dayjs";
+import { fetchAppointments } from "../helpers/apiCalls";
+import { useDataStore } from "../providers/dataStore";
 
-const Index = () => {
-  const [appointments, setAppointments] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [refreshTrigger, setRefreshTrigger] = useState(0); // State variable to trigger refresh
-  const [isFormOpen, setIsFormOpen] = useState(false);
-  const [initialData, setInitialData] = useState<Appointment | null>(null);
+interface Appointment {
+  id: string;
+  title: string;
+  type: string;
+  location?: string;
+  vendorName: string;
+  buyerName: string;
+  companyName: string;
+  time: string;
+}
 
+interface IndexProps {
+  data: Appointment[];
+}
+
+const Index: React.FC<IndexProps> = ({ data }) => {
+  const { appointments, setAppointments, refreshTrigger } = useDataStore();
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
+
+  // Setting up the initial state of appointments:
   useEffect(() => {
-    // Fetch appointments data from the API endpoint
-    const fetchAppointments = async () => {
-      try {
-        const response = await fetch("/api/find-appointments"); // Adjust the API endpoint URL as needed
-        if (!response.ok) {
-          throw new Error("Failed to fetch appointments");
-        }
-        const data = await response.json();
-        console.log(data);
-        const formattedData = data.appointments
-          .map((appointment) => {
-            return {
-              ...appointment,
-              vendorName: appointment.vendor.name,
-              buyerName: appointment.buyer.name,
-              time: `${dayjs(appointment.startTime).format(
-                "MMMM D, YYYY h:mm A"
-              )} - ${dayjs(appointment.endTime).format("h:mm A")}`,
-            };
-          })
-          .sort((a, b) => b.startTime - a.startTime);
-        setAppointments(formattedData);
-        setIsLoading(false);
-        setInitialData(null);
-      } catch (error) {
-        console.error("Error fetching appointments:", error);
-      }
-    };
+    setAppointments(data);
+  }, [data]);
 
-    fetchAppointments();
-  }, [refreshTrigger]); // Add refreshTrigger to the dependency array
+  // UseEffect set up to re-fetch data from the database once a new form is submitted:
+  useEffect(() => {
+    fetchAppointments("/api/find-appointments", setAppointments, setIsLoading);
+  }, [refreshTrigger]);
 
-  const nextAppointment = appointments[0];
-
-  // Function to refresh appointments
-  const refreshAppointments = () => {
-    // Increment refreshTrigger to trigger useEffect
-    setRefreshTrigger((prevTrigger) => prevTrigger + 1);
-  };
+  const nextAppointment: Appointment | undefined = appointments[0];
 
   return isLoading ? null : (
     <AppLayout>
@@ -64,29 +50,34 @@ const Index = () => {
           border: "px-5 py-10 rounded-sm shadow-md shadow-blue-primary",
         }}
       >
-        <TextLayout.Title title="Up Next" />
+        <TextLayout.Title as="h1" title="Up Next" />
         <Container.Flex
           className={{
             position: "mt-0",
           }}
         >
           <UpNext nextAppointment={nextAppointment} />
-          <NewAppointment
-            state={{ isFormOpen, setIsFormOpen }}
-            onAppointmentAdded={refreshAppointments}
-          />{" "}
+          <NewAppointment state={{ isFormOpen, setIsFormOpen }} />
           {/* Pass refresh function as prop */}
         </Container.Flex>
       </Container>
       <AppointmentList
-        initialData={initialData}
-        setInitialData={setInitialData}
-        isFormOpen={isFormOpen}
-        setIsFormOpen={setIsFormOpen}
+        state={{ isFormOpen, setIsFormOpen }}
         appointments={appointments}
       />
     </AppLayout>
   );
+};
+
+export const getServerSideProps = async () => {
+  const data: Appointment[] = await fetchAppointments(
+    `${url}/api/find-appointments`
+  );
+  return {
+    props: {
+      data,
+    },
+  };
 };
 
 export default Index;

@@ -6,58 +6,39 @@ import { Container } from "./Container";
 import TextLayout from "./TextLayout";
 import DeleteModal from "./DeleteModal";
 
-interface Appointment {
-  id: number;
-  title: string;
-  type: string;
-  location?: string;
-  time: string;
-  buyerName: string;
-  vendorName: string;
-  startTime: string;
-  endTime: string;
-}
-
 interface Props {
   appointments: Appointment[];
   isFormOpen: boolean;
   setIsFormOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  initialData: Appointment | null;
-  setInitialData: React.Dispatch<React.SetStateAction<Appointment | null>>;
-  onAppointmentAdded: () => void;
 }
 
 const AppointmentList: React.FC<Props> = ({
   appointments,
-  isFormOpen,
-  setIsFormOpen,
-  initialData,
-  setInitialData,
-  onAppointmentAdded,
+  state: { isFormOpen, setIsFormOpen },
 }) => {
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const [appointmentId, setAppointmentId] = useState<number | null>(null);
+  const [initialData, setInitialData] = useState(null);
 
   const handleUpdate = (appointment: Appointment) => {
-    setInitialData(appointment);
-    setIsFormOpen(true);
+    setInitialData(appointment); // to populate the data in the appointment form
+    setIsFormOpen(true); // to open modal with the appointment form
   };
 
   const handleOpenModal = (appointmentId: number) => {
-    setAppointmentId(appointmentId);
-    setOpenDeleteModal(true);
+    setAppointmentId(appointmentId); //
+    setOpenDeleteModal(true); // to open a modal to either delete the appointment or cancel
   };
 
   return (
     <Container.Columns className={{ dimension: "h-full", grid: "grid-cols-2" }}>
+      {/* Modals: */}
       {openDeleteModal && (
         <DeleteModal
           appointmentId={appointmentId}
           setOpenDeleteModal={setOpenDeleteModal}
-          onAppointmentAdded={onAppointmentAdded}
         />
       )}
-
       {/* Render appointments */}
       {appointments.map((appointment) => (
         <Container.Flex
