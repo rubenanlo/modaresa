@@ -35,8 +35,6 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
     initialFormData || {}
   ); // Set initial form data if provided
 
-  console.log(formResponse);
-
   const handleCancel = () => {
     setFormResponse({}); // Reset form response
     setIsFormOpen(false);

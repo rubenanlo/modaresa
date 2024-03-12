@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { AppointmentActions } from "./AppointmentActions";
+import { AppointmentActions, TrashCan } from "./AppointmentActions";
 import AppointmentForm from "./AppointmentForm";
 import { Button } from "./Button";
 import { Container } from "./Container";
 import TextLayout from "./TextLayout";
+import DeleteModal from "./DeleteModal";
 
 interface Appointment {
   id: number;
@@ -23,6 +24,7 @@ interface Props {
   setIsFormOpen: React.Dispatch<React.SetStateAction<boolean>>;
   initialData: Appointment | null;
   setInitialData: React.Dispatch<React.SetStateAction<Appointment | null>>;
+  onAppointmentAdded: () => void;
 }
 
 const AppointmentList: React.FC<Props> = ({
@@ -31,14 +33,31 @@ const AppointmentList: React.FC<Props> = ({
   setIsFormOpen,
   initialData,
   setInitialData,
+  onAppointmentAdded,
 }) => {
+  const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
+  const [appointmentId, setAppointmentId] = useState<number | null>(null);
+
   const handleUpdate = (appointment: Appointment) => {
     setInitialData(appointment);
     setIsFormOpen(true);
   };
 
+  const handleOpenModal = (appointmentId: number) => {
+    setAppointmentId(appointmentId);
+    setOpenDeleteModal(true);
+  };
+
   return (
     <Container.Columns className={{ dimension: "h-full", grid: "grid-cols-2" }}>
+      {openDeleteModal && (
+        <DeleteModal
+          appointmentId={appointmentId}
+          setOpenDeleteModal={setOpenDeleteModal}
+          onAppointmentAdded={onAppointmentAdded}
+        />
+      )}
+
       {/* Render appointments */}
       {appointments.map((appointment) => (
         <Container.Flex
@@ -61,6 +80,9 @@ const AppointmentList: React.FC<Props> = ({
               <Button onClick={() => handleUpdate(appointment)}>
                 <AppointmentActions className="h-5 w-5" />
               </Button>
+              <Button onClick={() => handleOpenModal(appointment.id)}>
+                <TrashCan className="h-5 w-5 text-red-500" />
+              </Button>
             </Container.Flex>
             <TextLayout.Paragraph paragraph={appointment.time} />
           </Container>
@@ -81,7 +103,7 @@ const AppointmentList: React.FC<Props> = ({
               paragraph={`Vendor: ${appointment.vendorName}`}
             />
             <TextLayout.Paragraph
-              paragraph={`Buyer: ${appointment.buyerName}`}
+              paragraph={`Buyer: ${appointment.buyerName} | ${appointment.companyName}`}
             />
           </Container>
         </Container.Flex>

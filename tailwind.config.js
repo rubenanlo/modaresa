@@ -27,6 +27,9 @@ module.exports = {
         gray: {
           primary: "#F0F0F0",
         },
+        red: {
+          primary: "#F559AC",
+        },
       },
     },
   },
