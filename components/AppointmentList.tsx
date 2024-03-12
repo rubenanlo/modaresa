@@ -77,10 +77,16 @@ const AppointmentList: React.FC<Props> = ({
           <Container>
             <Container.Flex className={{ flex: "justify-start gap-x-3" }}>
               <TextLayout.Title as="h3" title={appointment.title} />
-              <Button onClick={() => handleUpdate(appointment)}>
+              <Button
+                variant="callToAction"
+                onClick={() => handleUpdate(appointment)}
+              >
                 <AppointmentActions className="h-5 w-5" />
               </Button>
-              <Button onClick={() => handleOpenModal(appointment.id)}>
+              <Button
+                variant="callToAction"
+                onClick={() => handleOpenModal(appointment.id)}
+              >
                 <TrashCan className="h-5 w-5 text-red-500" />
               </Button>
             </Container.Flex>

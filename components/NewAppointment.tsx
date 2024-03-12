@@ -9,10 +9,7 @@ const NewAppointment = ({
 }) => {
   return (
     <>
-      <Button
-        className="shrink-0 text-white bg-green-primary rounded-full w-52 h-52 px-16"
-        onClick={() => setIsFormOpen(true)}
-      >
+      <Button variant="bold" onClick={() => setIsFormOpen(true)}>
         <PlusIcon />
       </Button>
       {isFormOpen && (

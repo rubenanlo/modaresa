@@ -77,6 +77,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
         onSubmit={(e) => handleSubmit(e)}
       >
         <Button
+          variant="callToAction"
           className={{
             dimension: "h-10 w-10",
             position: "rotate-45 absolute -ml-16 -mt-16",

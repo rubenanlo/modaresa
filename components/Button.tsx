@@ -12,8 +12,25 @@ interface ButtonProps {
 }
 
 const variants = {
-  primary: "bg-green-primary/60 text-gray-900 hover:bg-green-primary/70",
-  danger: "bg-red-primary text-white hover:bg-red-primary/90",
+  primary: {
+    dimension: "px-4 py-2",
+    background: "bg-green-primary/60 hover:bg-green-primary/70",
+    typography: "text-gray-900",
+    rounded: "rounded-md",
+  },
+  danger: {
+    background: "bg-red-primary hover:bg-red-primary/90",
+    dimension: "px-4 py-2",
+    typography: "text-white",
+    rounded: "rounded-md",
+  },
+  callToAction: "",
+  bold: {
+    dimension: "w-52 h-52 px-16 shrink-0",
+    background: "bg-green-primary",
+    typography: "text-white",
+    rounded: "rounded-full",
+  },
 };
 
 export const Button: React.FC<ButtonProps> = ({
@@ -25,8 +42,7 @@ export const Button: React.FC<ButtonProps> = ({
 }: ButtonProps) => {
   const classNameProps = clsx(
     turnObjectIntoString(className),
-    "px-4 py-2 rounded-md",
-    variants[variant]
+    turnObjectIntoString(variants[variant])
   );
 
   const renderedContent = text ? text : children; // Ensure proper rendering of text or children
