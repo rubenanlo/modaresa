@@ -1,26 +1,24 @@
 import { createContext, useContext, FC } from "react";
 import { useLocalObservable } from "mobx-react-lite";
-
-interface DataState {
-  appointments: string;
-  refreshTrigger: number;
-  setAppointments: (value: string) => void;
-  setRefreshTrigger: () => void;
-}
+import { Appointment, DataState } from "../library/Interface";
 
 const dataStoreContext = createContext<DataState | null>(null);
 
 export const DataStoreProvider: FC = ({ children }) => {
   const dataState = useLocalObservable<DataState>(() => ({
-    appointments: "",
+    appointments: [],
     refreshTrigger: 0,
+    isLoading: true,
 
-    setAppointments(value: string) {
+    setAppointments(value: Appointment[]) {
       this.appointments = value;
     },
 
     setRefreshTrigger() {
       this.refreshTrigger += 1;
+    },
+    setIsLoading(value: boolean) {
+      this.isLoading = value;
     },
   }));
 

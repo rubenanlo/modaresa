@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import Head from "next/head";
 import { DefaultSeo } from "next-seo";
-import { TITLE, META_DESCRIPTION, META_IMAGE, URL } from "root/config";
+import { TITLE, META_DESCRIPTION, META_IMAGE, URL } from "../config";
 import { Router } from "next/router";
 import * as gtag from "helpers/gtag";
 import RootProviders from "providers/rootProviders";
