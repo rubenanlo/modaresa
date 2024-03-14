@@ -1,6 +1,6 @@
 import Link from "next/link";
 import clsx from "clsx";
-import { turnObjectIntoString } from "helpers/manipulateText";
+import { turnObjectIntoString } from "../helpers/manipulateText";
 
 interface ButtonProps {
   className?: string;

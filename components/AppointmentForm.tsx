@@ -1,23 +1,26 @@
 import { useState, useEffect, useRef } from "react";
 import flatpickr from "flatpickr";
+import { observer } from "mobx-react-lite";
 import "flatpickr/dist/flatpickr.min.css"; // Import Flatpickr CSS
 import clsx from "clsx";
 import { Container } from "./Container";
 import { PlusIcon } from "./PlusIcon";
 import { Button } from "./Button";
 import { useDataStore } from "../providers/dataStore";
-import { observer } from "mobx-react-lite";
-import {
-  AppointmentFormProps,
-  FormResponse,
-} from "../library/InterfaceVariables";
+import { FormResponse } from "../library/Interface";
+
+interface AppointmentFormProps {
+  setIsFormOpen: (isOpen: boolean) => void;
+  initialFormData?: FormResponse; // Assuming FormResponse is correctly defined elsewhere
+  setInitialData?: (data: FormResponse | null) => void; // Optional based on your usage
+}
 
 const AppointmentForm: React.FC<AppointmentFormProps> = ({
   setIsFormOpen,
   initialFormData,
   setInitialData,
 }) => {
-  const { setRefreshTrigger, appointments, setIsLoading } = useDataStore(); // Get the setRefreshTrigger function from the data store
+  const { setRefreshTrigger, setIsLoading } = useDataStore(); // Get the setRefreshTrigger function from the data store
   const [formResponse, setFormResponse] = useState<FormResponse>(
     initialFormData || {}
   ); // Set initial form data if provided for appointment updates

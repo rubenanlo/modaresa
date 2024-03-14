@@ -1,6 +1,8 @@
 import React from "react";
 
-export function AppointmentActions(props) {
+type SVGComponentProps = React.SVGProps<SVGSVGElement>;
+
+export const AppointmentActions: React.FC<SVGComponentProps> = (props) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -14,9 +16,9 @@ export function AppointmentActions(props) {
       />
     </svg>
   );
-}
+};
 
-export function TrashCan(props) {
+export const TrashCan: React.FC<SVGComponentProps> = (props) => {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" {...props}>
       <path
@@ -25,4 +27,4 @@ export function TrashCan(props) {
       />
     </svg>
   );
-}
+};

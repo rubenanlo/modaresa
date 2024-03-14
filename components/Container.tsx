@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import clsx from "clsx";
-import { turnObjectIntoString } from "helpers/manipulateText";
+import { turnObjectIntoString } from "../helpers/manipulateText";
 
 interface ContainerProps {
   children: React.ReactNode;

@@ -1,7 +1,7 @@
-import clsx from "clsx";
-import { turnObjectIntoString } from "helpers/manipulateText";
-import { motion } from "framer-motion";
 import React from "react";
+import { motion } from "framer-motion";
+import clsx from "clsx";
+import { turnObjectIntoString } from "../helpers/manipulateText";
 
 interface TextLayoutProps {
   className?: string;
@@ -12,7 +12,7 @@ interface TextLayoutTitleProps extends TextLayoutProps {
   as?: "h1" | "h2" | "h3" | "h4";
   title: string;
   AdditionalComponent?: React.ReactNode;
-  props?: any;
+  props?: object;
 }
 
 interface TextLayoutSubtitleProps extends TextLayoutProps {
@@ -31,7 +31,7 @@ interface TextLayoutTagProps {
 
 interface TextLayoutNumberProps extends TextLayoutParagraphProps {
   number?: string;
-  animations?: any; // Add motion animation props
+  animations?: object;
 }
 
 const TextLayout: React.FC<TextLayoutProps> & {

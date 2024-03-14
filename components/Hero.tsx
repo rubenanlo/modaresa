@@ -1,8 +1,8 @@
-import React from "react";
+import { FC } from "react";
 import TextLayout from "./TextLayout";
 import { Container } from "./Container";
 
-const Hero = () => {
+const Hero: FC = () => {
   return (
     <Container className={" bg-blue-secondary px-10 py-10"}>
       <TextLayout.Title as="h1" title="Your Appointments!" />

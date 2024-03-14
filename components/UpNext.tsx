@@ -1,18 +1,9 @@
 import { Container } from "./Container";
 import TextLayout from "./TextLayout";
-
-interface NextAppointment {
-  title: string;
-  type: string;
-  location?: string;
-  startTime: string;
-  endTime: string;
-  vendorName: string;
-  buyerName: string;
-}
+import { Appointment } from "../library/Interface";
 
 interface UpNextProps {
-  nextAppointment: NextAppointment;
+  nextAppointment: Appointment;
 }
 
 const UpNext: React.FC<UpNextProps> = ({ nextAppointment }: UpNextProps) => {

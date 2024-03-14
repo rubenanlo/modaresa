@@ -1,4 +1,3 @@
-import { useRouter } from "next/router";
 import TextLayout from "./TextLayout";
 import { Button } from "./Button";
 import { Container } from "./Container";
@@ -13,7 +12,7 @@ const DeleteModal: DeleteMReact.FC<DeleteModalProps> = ({
   appointmentId,
   setOpenDeleteModal,
 }) => {
-  const { setRefreshTrigger } = useDataStore(); // Get the setRefreshTrigger function from the data store
+  const { setRefreshTrigger } = useDataStore();
 
   const handleDelete = async () => {
     try {

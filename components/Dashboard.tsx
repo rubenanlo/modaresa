@@ -1,15 +1,24 @@
 import React, { useEffect } from "react";
+import { observer } from "mobx-react-lite";
+import UpNext from "./UpNext";
+import FirstAppointment from "./FirstAppointment";
+import AppointmentList from "./AppointmentList";
+import NewAppointment from "./NewAppointment";
 import TextLayout from "./TextLayout";
 import { Container } from "./Container";
-import UpNext from "./UpNext";
-import NewAppointment from "./NewAppointment";
-import AppointmentList from "./AppointmentList";
 import { fetchAppointments } from "../helpers/apiCalls";
 import { useDataStore } from "../providers/dataStore";
-import { observer } from "mobx-react-lite";
-import { Appointment } from "../library/InterfaceVariables";
-import { DashboardProps } from "../library/InterfaceDashboardProps";
-import FirstAppointment from "./FirstAppointment";
+import { Appointment } from "../library/Interface";
+
+interface DashboardState {
+  isFormOpen: boolean;
+  setIsFormOpen: (isOpen: boolean) => void;
+  setIsLoading: (value: boolean) => void;
+}
+
+export interface DashboardProps {
+  state: DashboardState;
+}
 
 const Dashboard: React.FC<DashboardProps> = ({ state }) => {
   const {
@@ -30,11 +39,12 @@ const Dashboard: React.FC<DashboardProps> = ({ state }) => {
       );
     };
     fetchData();
-    setIsLoading(false);
+    setIsLoading(false); // so that the FirstAppointment component doesn't render when submitting the first form
   }, [refreshTrigger, setAppointments, setIsLoading]);
 
   const nextAppointment: Appointment | undefined = appointments[0];
 
+  // TODO: to create a loading component for better user experience
   return isLoading ? null : appointments.length === 0 ? (
     <FirstAppointment state={state} />
   ) : (

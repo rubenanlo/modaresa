@@ -2,9 +2,10 @@ import React from "react";
 import { Container } from "./Container";
 import NewAppointment from "./NewAppointment";
 import TextLayout from "./TextLayout";
+import { State } from "../library/Interface";
 
 interface FirstAppointmentProps {
-  state: any; // You should replace 'any' with the appropriate type for state
+  state: State; // You should replace 'any' with the appropriate type for state
 }
 
 const FirstAppointment: React.FC<FirstAppointmentProps> = ({ state }) => {

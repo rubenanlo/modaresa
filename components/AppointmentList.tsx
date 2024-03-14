@@ -5,14 +5,16 @@ import { Button } from "./Button";
 import { Container } from "./Container";
 import TextLayout from "./TextLayout";
 import DeleteModal from "./DeleteModal";
+import { Appointment, State } from "../library/Interface";
 
-interface Props {
+interface ListProps {
   appointments: Appointment[];
   isFormOpen: boolean;
   setIsFormOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  state: State;
 }
 
-const AppointmentList: React.FC<Props> = ({
+const AppointmentList: React.FC<ListProps> = ({
   appointments,
   state: { isFormOpen, setIsFormOpen },
 }) => {

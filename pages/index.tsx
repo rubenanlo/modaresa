@@ -5,8 +5,11 @@ import AppLayout from "../components/AppLayout";
 import { fetchAppointments } from "../helpers/apiCalls";
 import { useDataStore } from "../providers/dataStore";
 import Dashboard from "../components/Dashboard";
-import { Appointment, IndexProps } from "../library/Interface";
+import { Appointment } from "../library/Interface";
 
+interface IndexProps {
+  data: Appointment[];
+}
 const Index: React.FC<IndexProps> = ({ data }) => {
   const { setAppointments, isLoading, setIsLoading } = useDataStore();
   const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
@@ -18,6 +21,7 @@ const Index: React.FC<IndexProps> = ({ data }) => {
     //eslint-disable-next-line
   }, [data, isLoading]);
 
+  // TODO: to create a loading component for better user experience
   return isLoading ? null : (
     <AppLayout>
       <Dashboard state={{ isFormOpen, setIsFormOpen, setIsLoading }} />

@@ -1,10 +1,12 @@
+import { FC, ReactNode } from "react";
 import { CalendarIcon, UserIcon } from "@heroicons/react/24/outline";
 import { Container } from "./Container";
 import Link from "next/link";
 import logo from "../public/assets/logo.webp";
 import Hero from "./Hero";
+import { NavigationItem } from "../library/Interface";
 
-const navigation = [
+const navigation: NavigationItem[] = [
   { name: "Appointments", href: "/", icon: CalendarIcon, current: true },
   {
     name: "Ruben Andino",
@@ -14,7 +16,12 @@ const navigation = [
   },
 ];
 
-const AppLayout = ({ children }) => {
+// Define a type for the AppLayout's props
+interface AppLayoutProps {
+  children: ReactNode;
+}
+
+const AppLayout: FC<AppLayoutProps> = ({ children }) => {
   return (
     <Container className="font-clash">
       {/* Static sidebar for desktop */}

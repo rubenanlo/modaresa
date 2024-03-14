@@ -18,20 +18,13 @@ export interface Appointment {
   endTime: string;
 }
 
-export interface IndexProps {
-  data: Appointment[];
-}
-
 export interface DataState {
   appointments: Appointment[];
   setAppointments: (value: Appointment[]) => void;
   refreshTrigger: number;
   setRefreshTrigger: () => void;
   setIsLoading: (value: boolean) => void;
-}
-
-export interface DashboardProps {
-  state: object;
+  isLoading: boolean;
 }
 
 export interface FormResponse {
@@ -48,8 +41,19 @@ export interface FormResponse {
   };
 }
 
-export interface AppointmentFormProps {
-  setIsFormOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  initialFormData?: FormResponse; // Add initialFormData prop to receive data for update
-  setInitialData: React.Dispatch<React.SetStateAction<FormResponse | null>>; // Add setInitialData prop
+export interface State {
+  isFormOpen: boolean;
+  setIsFormOpen: (isOpen: boolean) => void;
+  isLoading: boolean;
+  setIsLoading: (value: boolean) => void;
+  formResponse: FormResponse;
+  setFormResponse: (value: FormResponse) => void;
 }
+
+export type NavigationItem = {
+  name: string;
+  href: string;
+  target?: string;
+  icon: (props: React.ComponentProps<"svg">) => JSX.Element;
+  current?: boolean;
+};

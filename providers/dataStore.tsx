@@ -9,6 +9,7 @@ export const DataStoreProvider: FC = ({ children }) => {
     appointments: [],
     refreshTrigger: 0,
     isLoading: true,
+    isFirstAppointment: false,
 
     setAppointments(value: Appointment[]) {
       this.appointments = value;
@@ -19,6 +20,9 @@ export const DataStoreProvider: FC = ({ children }) => {
     },
     setIsLoading(value: boolean) {
       this.isLoading = value;
+    },
+    setIsFirstAppointment(value: boolean) {
+      this.isFirstAppointment = value;
     },
   }));
 

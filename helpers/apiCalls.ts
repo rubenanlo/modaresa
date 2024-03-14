@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import { Appointment } from "../library/Interface";
 
 export const fetchAppointments = async (
   url: string,
@@ -6,16 +7,13 @@ export const fetchAppointments = async (
   setIsLoading?: React.Dispatch<React.SetStateAction<boolean>>
 ): Promise<Appointment[]> => {
   try {
-    // Set loading state to true before fetching data
-    if (setIsLoading) setIsLoading(true);
-
     const response = await fetch(url); // Use the API endpoint directly from the config
     if (!response.ok) {
       throw new Error("Failed to fetch appointments");
     }
     const data = await response.json();
     const formattedData: Appointment[] = data.appointments
-      .map((appointment: any) => ({
+      .map((appointment: Appointment) => ({
         id: appointment.id,
         title: appointment.title,
         type: appointment.type,
