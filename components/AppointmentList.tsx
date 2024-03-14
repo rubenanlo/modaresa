@@ -40,7 +40,7 @@ const AppointmentList: React.FC<Props> = ({
         />
       )}
       {/* Render appointments */}
-      {appointments.map((appointment) => (
+      {appointments?.map((appointment) => (
         <Container.Flex
           key={appointment.id}
           className={{

@@ -7,33 +7,17 @@ import { PlusIcon } from "./PlusIcon";
 import { Button } from "./Button";
 import { useDataStore } from "../providers/dataStore";
 import { observer } from "mobx-react-lite";
-
-interface FormResponse {
-  appointmentId?: string; // Add appointmentId to the FormResponse interface
-  vendorName?: string;
-  buyerName?: string;
-  companyName?: string;
-  appointmentData?: {
-    title?: string;
-    type?: string;
-    location?: string;
-    startTime?: string;
-    endTime?: string;
-  };
-}
-
-interface AppointmentFormProps {
-  setIsFormOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  initialFormData?: FormResponse; // Add initialFormData prop to receive data for update
-  setInitialData: React.Dispatch<React.SetStateAction<FormResponse | null>>; // Add setInitialData prop
-}
+import {
+  AppointmentFormProps,
+  FormResponse,
+} from "../library/InterfaceVariables";
 
 const AppointmentForm: React.FC<AppointmentFormProps> = ({
   setIsFormOpen,
   initialFormData,
   setInitialData,
 }) => {
-  const { setRefreshTrigger } = useDataStore(); // Get the setRefreshTrigger function from the data store
+  const { setRefreshTrigger, appointments, setIsLoading } = useDataStore(); // Get the setRefreshTrigger function from the data store
   const [formResponse, setFormResponse] = useState<FormResponse>(
     initialFormData || {}
   ); // Set initial form data if provided for appointment updates
@@ -82,8 +66,6 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
     };
   }, []); // Removed dependency to ensure this effect runs once on component mount
 
-  console.log("initial", initialFormData);
-  console.log("response", formResponse);
   const handleCancel = () => {
     setFormResponse({}); // Reset form response
     setIsFormOpen(false);
@@ -112,7 +94,8 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
       }
       setFormResponse({});
       setIsFormOpen(false);
-      setRefreshTrigger((prev) => !prev); // Trigger refresh by toggling refreshTrigger
+      setRefreshTrigger(); // Trigger refresh by toggling refreshTrigger
+      setIsLoading(true); // Set loading state to true to re-fetch appointments
     } catch (error) {
       console.error(error);
       alert("An error occurred while saving the appointment.");

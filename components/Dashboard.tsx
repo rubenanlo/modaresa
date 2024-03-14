@@ -7,33 +7,37 @@ import AppointmentList from "./AppointmentList";
 import { fetchAppointments } from "../helpers/apiCalls";
 import { useDataStore } from "../providers/dataStore";
 import { observer } from "mobx-react-lite";
-
-interface DashboardProps {
-  nextAppointment: any; // You should replace 'any' with the appropriate type for nextAppointment
-  state: any; // You should replace 'any' with the appropriate type for state
-  appointments: any[]; // You should replace 'any[]' with the appropriate type for appointments
-}
+import { Appointment } from "../library/InterfaceVariables";
+import { DashboardProps } from "../library/InterfaceDashboardProps";
+import FirstAppointment from "./FirstAppointment";
 
 const Dashboard: React.FC<DashboardProps> = ({ state }) => {
-  const { appointments, setAppointments, refreshTrigger } = useDataStore();
-  console.log("🚀 ~ refreshTrigger:", refreshTrigger);
+  const {
+    appointments,
+    setAppointments,
+    refreshTrigger,
+    setIsLoading,
+    isLoading,
+  } = useDataStore();
 
-  console.log("🚀 ~ appointments:", appointments);
   // UseEffect set up to re-fetch data from the database once a new form is submitted:
   useEffect(() => {
     const fetchData = async () => {
       await fetchAppointments(
         "/api/find-appointments",
         setAppointments,
-        state.setIsLoading
+        setIsLoading
       );
     };
     fetchData();
-  }, [refreshTrigger, setAppointments, state.setIsLoading]);
+    setIsLoading(false);
+  }, [refreshTrigger, setAppointments, setIsLoading]);
 
   const nextAppointment: Appointment | undefined = appointments[0];
 
-  return (
+  return isLoading ? null : appointments.length === 0 ? (
+    <FirstAppointment state={state} />
+  ) : (
     <>
       <Container
         className={{
