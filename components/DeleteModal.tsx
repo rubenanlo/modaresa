@@ -1,19 +1,20 @@
-import React from "react";
+import { useRouter } from "next/router";
 import TextLayout from "./TextLayout";
 import { Button } from "./Button";
 import { Container } from "./Container";
+import { useDataStore } from "../providers/dataStore";
 
 interface DeleteModalProps {
   appointmentId: number;
-  onAppointmentAdded: () => void;
   setOpenDeleteModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const DeleteModal: DeleteMReact.FC<DeleteModalProps> = ({
   appointmentId,
-  onAppointmentAdded,
   setOpenDeleteModal,
 }) => {
+  const { setRefreshTrigger } = useDataStore(); // Get the setRefreshTrigger function from the data store
+
   const handleDelete = async () => {
     try {
       const response = await fetch(
@@ -25,12 +26,14 @@ const DeleteModal: DeleteMReact.FC<DeleteModalProps> = ({
       if (!response.ok) {
         throw new Error("Failed to delete appointment");
       }
-      onAppointmentAdded();
-      setOpenDeleteModal(false);
+      setOpenDeleteModal(false); // Close the modal to return to the appointment list
+      setRefreshTrigger((prev) => !prev); // Trigger refresh by toggling refreshTrigger
     } catch (error) {
       console.error("Error deleting appointment:", error);
+      alert("An error occurred while deleting the appointment.");
     }
   };
+
   const handleCancel = () => {
     setOpenDeleteModal(false);
   };
@@ -59,8 +62,8 @@ const DeleteModal: DeleteMReact.FC<DeleteModalProps> = ({
           className="text-gray-200"
         />
         <Container.Flex className={{ flex: "justify-center gap-x-10" }}>
-          <Button onClick={handleCancel}>Cancel</Button>
-          <Button variant="danger" onClick={handleDelete}>
+          <Button onClick={() => handleCancel()}>Cancel</Button>
+          <Button variant="danger" onClick={() => handleDelete()}>
             Delete
           </Button>
         </Container.Flex>
