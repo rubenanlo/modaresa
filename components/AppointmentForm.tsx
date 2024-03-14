@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+import flatpickr from "flatpickr";
+import "flatpickr/dist/flatpickr.min.css"; // Import Flatpickr CSS
 import clsx from "clsx";
 import { Container } from "./Container";
 import { PlusIcon } from "./PlusIcon";
 import { Button } from "./Button";
 import { useDataStore } from "../providers/dataStore";
+import { observer } from "mobx-react-lite";
 
 interface FormResponse {
   appointmentId?: string; // Add appointmentId to the FormResponse interface
@@ -31,11 +34,56 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
   setInitialData,
 }) => {
   const { setRefreshTrigger } = useDataStore(); // Get the setRefreshTrigger function from the data store
-
   const [formResponse, setFormResponse] = useState<FormResponse>(
     initialFormData || {}
   ); // Set initial form data if provided for appointment updates
 
+  const startDateTimeRef = useRef(null);
+  const endDateTimeRef = useRef(null);
+
+  useEffect(() => {
+    let endPicker; // Define outside to check if it's already initialized
+
+    const startPicker = flatpickr(startDateTimeRef.current, {
+      enableTime: true,
+      dateFormat: "Y-m-d  |  H:i",
+      onChange: (selectedDates) => {
+        if (selectedDates[0]) {
+          const startDate = selectedDates[0];
+          const endDate = new Date(startDate.getTime() + 60 * 60 * 1000); // 1 hour later
+
+          setFormResponse((prevResponse) => ({
+            ...prevResponse,
+            appointmentData: {
+              ...prevResponse.appointmentData,
+              startTime: startDate.toISOString(),
+              endTime: endDate.toISOString(), // Set endTime in your form state here
+            },
+          }));
+
+          if (endPicker) {
+            // If endPicker is already initialized, just set its date
+            endPicker.setDate(endDate, false);
+          } else {
+            // Initialize endPicker if it hasn't been already
+            endPicker = flatpickr(endDateTimeRef.current, {
+              enableTime: true,
+              dateFormat: "Y-m-d H:i",
+              defaultDate: endDate,
+            });
+          }
+        }
+      },
+    });
+
+    return () => {
+      startPicker.destroy();
+      if (endPicker) endPicker.destroy();
+    };
+  }, []); // Removed dependency to ensure this effect runs once on component mount
+
+  console.log("initial", initialFormData);
+  console.log("response", formResponse);
   const handleCancel = () => {
     setFormResponse({}); // Reset form response
     setIsFormOpen(false);
@@ -192,7 +240,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                   type="text"
                   name="title"
                   id="title"
-                  value={formResponse.title || ""}
+                  value={formResponse.title}
                   autoComplete="title"
                   placeholder="Include the title of the appointment"
                   onChange={(e) =>
@@ -223,13 +271,14 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                   <div className="mt-2">
                     <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-blue-primary sm:max-w-md">
                       <input
-                        type="datetime-local"
-                        name="startDate"
-                        id="startDate"
+                        ref={startDateTimeRef}
+                        type="text"
+                        name="startTime"
+                        id="startTime"
+                        className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                        placeholder="Start Date & Time"
                         value={formResponse.startTime}
                         autoComplete="startDate"
-                        className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                        placeholder="Name"
                         onChange={(e) =>
                           setFormResponse({
                             ...formResponse,
@@ -256,13 +305,14 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                   <div className="mt-2">
                     <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-blue-primary sm:max-w-md">
                       <input
-                        type="datetime-local"
-                        name="endTime"
-                        id="endTime"
-                        value={formResponse.endTime}
-                        autoComplete="endTime"
+                        ref={endDateTimeRef}
+                        type="text" // Change type to text for Flatpickr
+                        name="startTime"
+                        id="startTime"
                         className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                        placeholder="Name"
+                        placeholder="Start Date & Time"
+                        autoComplete="endTime"
+                        // value={formResponse.startTime || formResponse.endTime}
                         onChange={(e) =>
                           setFormResponse({
                             ...formResponse,
@@ -272,21 +322,6 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                             },
                           })
                         }
-                        onBlur={(e) => {
-                          const startTime = new Date(
-                            formResponse.appointmentData.startDate!
-                          );
-                          const endTime = new Date(e.target.value);
-                          if (
-                            startTime.getFullYear() !== endTime.getFullYear() ||
-                            startTime.getMonth() !== endTime.getMonth() ||
-                            startTime.getDate() !== endTime.getDate()
-                          ) {
-                            alert(
-                              "Ending date must be on the same day as the starting date."
-                            );
-                          }
-                        }}
                       />
                     </div>
                   </div>
@@ -428,4 +463,4 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
   );
 };
 
-export default AppointmentForm;
+export default observer(AppointmentForm);

@@ -77,7 +77,6 @@ export default async function handler(
         },
       });
       res.status(201).json({ appointment, vendor, buyer });
-      console.log("Request Body:", req.body); // Log the request body
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: "Internal Server Error" });

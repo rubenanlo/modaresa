@@ -26,7 +26,7 @@ const AppointmentList: React.FC<Props> = ({
   };
 
   const handleOpenModal = (appointmentId: number) => {
-    setAppointmentId(appointmentId); //
+    setAppointmentId(appointmentId); // to set the appointment id to be deleted
     setOpenDeleteModal(true); // to open a modal to either delete the appointment or cancel
   };
 

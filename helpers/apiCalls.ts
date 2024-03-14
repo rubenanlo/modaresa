@@ -23,6 +23,8 @@ export const fetchAppointments = async (
         vendorName: appointment.vendor.name,
         buyerName: appointment.buyer.name,
         companyName: appointment.buyer.companyName,
+        startTime: appointment.startTime,
+        endTime: appointment.endTime,
         time: `${dayjs(appointment.startTime).format(
           "MMMM D, YYYY h:mm A"
         )} - ${dayjs(appointment.endTime).format("h:mm A")}`,

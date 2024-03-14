@@ -1,10 +1,11 @@
-import Head from "next/head";
-import { TITLE, META_DESCRIPTION, META_IMAGE, URL } from "root/config";
-import { DefaultSeo } from "next-seo";
-import "styles/globals.css";
 import { useEffect } from "react";
+import Head from "next/head";
+import { DefaultSeo } from "next-seo";
+import { TITLE, META_DESCRIPTION, META_IMAGE, URL } from "root/config";
 import { Router } from "next/router";
 import * as gtag from "helpers/gtag";
+import RootProviders from "providers/rootProviders";
+import "styles/globals.css";
 
 const App = ({ Component, pageProps }) => {
   // Track pages with google analytics
@@ -30,7 +31,9 @@ const App = ({ Component, pageProps }) => {
         openGraph={{ url: URL, images: [{ url: META_IMAGE }] }}
         twitter={{ cardType: "summary_large_image" }}
       />
-      <Component {...pageProps} />
+      <RootProviders>
+        <Component {...pageProps} />
+      </RootProviders>
     </>
   );
 };
