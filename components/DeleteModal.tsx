@@ -9,7 +9,7 @@ interface DeleteModalProps {
   setOpenDeleteModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const DeleteModal: DeleteMReact.FC<DeleteModalProps> = ({
+const DeleteModal: React.FC<DeleteModalProps> = ({
   appointmentId,
   setOpenDeleteModal,
 }) => {

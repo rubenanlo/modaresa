@@ -1,7 +1,7 @@
 For a live version, please navigate to this link: https://calendar.rawdev.io
 
-Run npm install to install all the npm packages used in the application
-Run npm run dev to run the application in local host.
+Run NPM install to install all the NPM packages used in the application  
+Run NPM run dev to run the application on localhost.
 
 Backend:
 

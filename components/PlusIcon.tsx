@@ -1,7 +1,7 @@
 import React from "react";
 
 interface PlusIconProps {
-  [key: string]: any;
+  [key: string]: string;
 }
 
 export const PlusIcon: React.FC<PlusIconProps> = (props: PlusIconProps) => {

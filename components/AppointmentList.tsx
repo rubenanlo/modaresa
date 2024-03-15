@@ -9,15 +9,11 @@ import { Appointment, State } from "../library/Interface";
 
 interface ListProps {
   appointments: Appointment[];
-  isFormOpen: boolean;
-  setIsFormOpen: React.Dispatch<React.SetStateAction<boolean>>;
   state: State;
 }
 
-const AppointmentList: React.FC<ListProps> = ({
-  appointments,
-  state: { isFormOpen, setIsFormOpen },
-}) => {
+const AppointmentList: React.FC<ListProps> = ({ appointments, state }) => {
+  const { isFormOpen, setIsFormOpen } = state;
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const [appointmentId, setAppointmentId] = useState<number | null>(null);
   const [initialData, setInitialData] = useState(null);
@@ -56,6 +52,14 @@ const AppointmentList: React.FC<ListProps> = ({
           setOpenDeleteModal={setOpenDeleteModal}
         />
       )}
+      {isFormOpen && initialData && (
+        <AppointmentForm
+          initialFormData={initialData}
+          setIsFormOpen={setIsFormOpen}
+          setInitialData={setInitialData}
+        />
+      )}
+
       {/* Render appointments */}
       {appointments?.map((appointment) => (
         <Container.Flex
@@ -64,14 +68,6 @@ const AppointmentList: React.FC<ListProps> = ({
             flex: "flex-col justify-center gap-y-2 my-10",
           }}
         >
-          {isFormOpen && initialData && (
-            <AppointmentForm
-              initialFormData={initialData}
-              setIsFormOpen={setIsFormOpen}
-              setInitialData={setInitialData}
-            />
-          )}
-
           <Container>
             <Container.Flex className={{ flex: "justify-start gap-x-3" }}>
               <TextLayout.Title as="h3" title={appointment.title} />

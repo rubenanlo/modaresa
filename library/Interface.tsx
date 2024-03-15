@@ -54,7 +54,7 @@ export type NavigationItem = {
   name: string;
   href: string;
   target?: string;
-  icon: (props: React.ComponentProps<"svg">) => JSX.Element;
+  icon: React.ElementType<SVGProps<SVGSVGElement>>;
   current?: boolean;
 };
 

@@ -311,7 +311,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                     </div>
                     <div className="text-sm leading-6">
                       <label
-                        htmlFor="physical"
+                        htmlFor="PHYSICAL"
                         className="font-medium text-gray-900"
                       >
                         PHYSICAL
@@ -321,7 +321,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                   <div className="relative flex gap-x-3">
                     <div className="flex h-6 items-center">
                       <input
-                        id="virtual"
+                        id="VIRTUAL"
                         name="type"
                         type="radio"
                         value="VIRTUAL"
@@ -348,7 +348,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                     </div>
                     <div className="text-sm leading-6">
                       <label
-                        htmlFor="virtual"
+                        htmlFor="VIRTUAL"
                         className="font-medium text-gray-900"
                       >
                         VIRTUAL

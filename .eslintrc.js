@@ -31,7 +31,7 @@ module.exports = {
   plugins: ["react", "no-only-tests", "@typescript-eslint"], // Add TypeScript plugin
   rules: {
     "no-only-tests/no-only-tests": "error",
-    "@typescript-eslint/explicit-module-boundary-types": "off", // Disable explicit module boundary types for functions
+    // "@typescript-eslint/explicit-module-boundary-types": "off", // Disable explicit module boundary types for functions
   },
   overrides: [
     {
