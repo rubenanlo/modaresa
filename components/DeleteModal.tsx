@@ -2,6 +2,7 @@ import TextLayout from "./TextLayout";
 import { Button } from "./Button";
 import { Container } from "./Container";
 import { useDataStore } from "../providers/dataStore";
+import { handleDelete } from "../helpers/apiCalls";
 
 interface DeleteModalProps {
   appointmentId: number;
@@ -12,26 +13,7 @@ const DeleteModal: DeleteMReact.FC<DeleteModalProps> = ({
   appointmentId,
   setOpenDeleteModal,
 }) => {
-  const { setRefreshTrigger } = useDataStore();
-
-  const handleDelete = async () => {
-    try {
-      const response = await fetch(
-        `/api/delete-appointment?id=${appointmentId}`,
-        {
-          method: "DELETE",
-        }
-      );
-      if (!response.ok) {
-        throw new Error("Failed to delete appointment");
-      }
-      setOpenDeleteModal(false); // Close the modal to return to the appointment list
-      setRefreshTrigger((prev) => !prev); // Trigger refresh by toggling refreshTrigger
-    } catch (error) {
-      console.error("Error deleting appointment:", error);
-      alert("An error occurred while deleting the appointment.");
-    }
-  };
+  const { setRefreshTrigger, setIsLoading } = useDataStore();
 
   const handleCancel = () => {
     setOpenDeleteModal(false);
@@ -62,7 +44,17 @@ const DeleteModal: DeleteMReact.FC<DeleteModalProps> = ({
         />
         <Container.Flex className={{ flex: "justify-center gap-x-10" }}>
           <Button onClick={() => handleCancel()}>Cancel</Button>
-          <Button variant="danger" onClick={() => handleDelete()}>
+          <Button
+            variant="danger"
+            onClick={() =>
+              handleDelete(
+                appointmentId,
+                setOpenDeleteModal,
+                setRefreshTrigger,
+                setIsLoading
+              )
+            }
+          >
             Delete
           </Button>
         </Container.Flex>

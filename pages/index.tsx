@@ -11,18 +11,17 @@ interface IndexProps {
   data: Appointment[];
 }
 const Index: React.FC<IndexProps> = ({ data }) => {
-  const { setAppointments, isLoading, setIsLoading } = useDataStore();
+  const { setAppointments, setIsLoading } = useDataStore();
   const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
 
   // Setting up the initial state of appointments, and clearing the loading and isFirstAppointment state
   useEffect(() => {
     setAppointments(data); // setting appointments state with the fetched data in global state management
-    setIsLoading(false); // setting loading state to false after fetching data to render content in index.tsx
-    //eslint-disable-next-line
-  }, [data, isLoading]);
+    // eslint-disable-next-line
+  }, [data]);
 
   // TODO: to create a loading component for better user experience
-  return isLoading ? null : (
+  return (
     <AppLayout>
       <Dashboard state={{ isFormOpen, setIsFormOpen, setIsLoading }} />
     </AppLayout>

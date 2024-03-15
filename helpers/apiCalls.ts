@@ -3,8 +3,7 @@ import { Appointment } from "../library/Interface";
 
 export const fetchAppointments = async (
   url: string,
-  setAppointments?: React.Dispatch<React.SetStateAction<Appointment[]>>,
-  setIsLoading?: React.Dispatch<React.SetStateAction<boolean>>
+  setAppointments?: React.Dispatch<React.SetStateAction<Appointment[]>>
 ): Promise<Appointment[]> => {
   try {
     const response = await fetch(url); // Use the API endpoint directly from the config
@@ -32,15 +31,35 @@ export const fetchAppointments = async (
     // Set the fetched appointments in the state if provided
     if (setAppointments) setAppointments(formattedData);
 
-    // Set loading state to false after fetching and setting data
-    if (setIsLoading) setIsLoading(false);
-
     return formattedData; // Return the fetched appointments
   } catch (error) {
     console.error("Error fetching appointments:", error);
-    // Set loading state to false if an error occurs
-    if (setIsLoading) setIsLoading(false);
     // Throw the error to be handled by the caller
     throw error;
+  }
+};
+
+export const handleDelete = async (
+  appointmentId: number,
+  setOpenDeleteModal: React.Dispatch<React.SetStateAction<boolean>>,
+  setRefreshTrigger: React.Dispatch<React.SetStateAction<boolean>>,
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
+) => {
+  try {
+    setIsLoading(true); // Set loading state to true before fetching data
+    const response = await fetch(
+      `/api/delete-appointment?id=${appointmentId}`,
+      {
+        method: "DELETE",
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Failed to delete appointment");
+    }
+    setRefreshTrigger(); // Trigger refresh by toggling refreshTrigger
+    setOpenDeleteModal(false); // Close the modal to return to the appointment list
+  } catch (error) {
+    console.error("Error deleting appointment:", error);
+    alert("An error occurred while deleting the appointment.");
   }
 };

@@ -1,10 +1,14 @@
-import { createContext, useContext, FC } from "react";
+import { createContext, useContext, FC, ReactNode } from "react";
 import { useLocalObservable } from "mobx-react-lite";
 import { Appointment, DataState } from "../library/Interface";
 
 const dataStoreContext = createContext<DataState | null>(null);
 
-export const DataStoreProvider: FC = ({ children }) => {
+interface DataStoreProps {
+  children: ReactNode;
+}
+
+export const DataStoreProvider: FC<DataStoreProps> = ({ children }) => {
   const dataState = useLocalObservable<DataState>(() => ({
     appointments: [],
     refreshTrigger: 0,

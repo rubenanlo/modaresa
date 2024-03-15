@@ -57,3 +57,21 @@ export type NavigationItem = {
   icon: (props: React.ComponentProps<"svg">) => JSX.Element;
   current?: boolean;
 };
+
+// Animations:
+export interface TransitionOptions {
+  when?: "beforeChildren" | "afterChildren";
+  staggerChildren?: number;
+}
+
+export interface AnimationState {
+  opacity: number;
+  height?: number | "auto";
+  transition?: TransitionOptions;
+  x?: number | string;
+}
+
+export interface AnimationVariants {
+  visible: AnimationState;
+  hidden: AnimationState;
+}

@@ -76,6 +76,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    setIsLoading(true);
     e.preventDefault();
     const method = formResponse.appointmentId ? "PUT" : "POST"; // Determine method based on the presence of appointmentId
     const url = formResponse.appointmentId
@@ -98,7 +99,6 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
       setFormResponse({});
       setIsFormOpen(false);
       setRefreshTrigger(); // Trigger refresh by toggling refreshTrigger
-      setIsLoading(true); // Set loading state to true to re-fetch appointments
     } catch (error) {
       console.error(error);
       alert("An error occurred while saving the appointment.");

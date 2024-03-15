@@ -9,6 +9,7 @@ import { Container } from "./Container";
 import { fetchAppointments } from "../helpers/apiCalls";
 import { useDataStore } from "../providers/dataStore";
 import { Appointment } from "../library/Interface";
+import LoadingModal from "./LoadingModal";
 
 interface DashboardState {
   isFormOpen: boolean;
@@ -31,21 +32,20 @@ const Dashboard: React.FC<DashboardProps> = ({ state }) => {
 
   // UseEffect set up to re-fetch data from the database once a new form is submitted:
   useEffect(() => {
+    setIsLoading(true); // Set loading state to true before fetching data
     const fetchData = async () => {
-      await fetchAppointments(
-        "/api/find-appointments",
-        setAppointments,
-        setIsLoading
-      );
+      await fetchAppointments("/api/find-appointments", setAppointments);
     };
     fetchData();
     setIsLoading(false); // so that the FirstAppointment component doesn't render when submitting the first form
-  }, [refreshTrigger, setAppointments, setIsLoading]);
+    // eslint-disable-next-line
+  }, [refreshTrigger]);
 
   const nextAppointment: Appointment | undefined = appointments[0];
 
-  // TODO: to create a loading component for better user experience
-  return isLoading ? null : appointments.length === 0 ? (
+  return isLoading ? (
+    <LoadingModal />
+  ) : appointments.length === 0 ? (
     <FirstAppointment state={state} />
   ) : (
     <>
