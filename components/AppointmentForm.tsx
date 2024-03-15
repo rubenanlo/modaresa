@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import { observer } from "mobx-react-lite";
 import "flatpickr/dist/flatpickr.min.css"; // Import Flatpickr CSS
+import dayjs from "dayjs";
 import clsx from "clsx";
 import { Container } from "./Container";
 import { PlusIcon } from "./PlusIcon";
@@ -169,7 +170,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                   type="text"
                   name="title"
                   id="title"
-                  value={formResponse.title}
+                  value={formResponse.appointmentData?.title || ""}
                   autoComplete="title"
                   placeholder="Include the title of the appointment"
                   onChange={(e) =>
@@ -187,7 +188,9 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
             </div>
 
             {/* Date & Time Inputs */}
-            <Container.Columns className={{ grid: "grid-cols-2" }}>
+            <Container.Columns
+              className={{ grid: "grid-cols-2 gap-x-5 sm:gap-x-0" }}
+            >
               {/* Starting Date & Time */}
               <div className="mt-2 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                 <div className="sm:col-span-4">
@@ -197,6 +200,13 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                   >
                     Starting date & time
                   </label>
+                  {formResponse.appointmentData?.startTime && (
+                    <p className="text-xs">
+                      {dayjs(formResponse.appointmentData?.startTime).format(
+                        "MMMM D, YYYY | h:mm A"
+                      )}
+                    </p>
+                  )}
                   <div className="mt-2">
                     <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-blue-primary sm:max-w-md">
                       <input
@@ -204,9 +214,8 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                         type="text"
                         name="startTime"
                         id="startTime"
-                        className="block overflow-x-auto flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                        className="block overflow-x-auto flex-1 border-0 bg-transparent py-1.5 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                         placeholder="Start Date & Time"
-                        value={formResponse.startTime}
                         autoComplete="startDate"
                         onChange={(e) =>
                           setFormResponse({
@@ -231,6 +240,13 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                   >
                     Ending date & time
                   </label>
+                  {formResponse.appointmentData?.endTime && (
+                    <p className="text-xs">
+                      {dayjs(formResponse.appointmentData?.endTime).format(
+                        "MMMM D, YYYY | h:mm A"
+                      )}
+                    </p>
+                  )}
                   <div className="mt-2">
                     <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-blue-primary sm:max-w-md">
                       <input
@@ -238,8 +254,8 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                         type="text" // Change type to text for Flatpickr
                         name="startTime"
                         id="startTime"
-                        className="block overflow-x-auto  flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                        placeholder="Start Date & Time"
+                        className="block overflow-x-auto  flex-1 border-0 bg-transparent py-1.5 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                        placeholder="End Date & Time"
                         autoComplete="endTime"
                         // value={formResponse.startTime || formResponse.endTime}
                         onChange={(e) =>
@@ -273,10 +289,11 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                         type="radio"
                         value="PHYSICAL"
                         checked={
-                          initialFormData && formResponse.type === "PHYSICAL"
+                          initialFormData &&
+                          formResponse.appointmentData.type === "PHYSICAL"
                         }
                         className={clsx(
-                          formResponse.type === "PHYSICAL"
+                          formResponse.appointmentData?.type === "PHYSICAL"
                             ? "ring-2 ring-inset ring-blue-primary"
                             : "border-gray-300",
                           "h-4 w-4 rounded border-gray-300 text-blue-primary focus:ring-blue-primary"
@@ -309,10 +326,11 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                         type="radio"
                         value="VIRTUAL"
                         checked={
-                          initialFormData && formResponse.type === "VIRTUAL"
+                          initialFormData &&
+                          formResponse.appointmentData.type === "VIRTUAL"
                         }
                         className={clsx(
-                          formResponse.type === "PHYSICAL"
+                          formResponse.appointmentData?.type === "VIRTUAL"
                             ? "ring-2 ring-inset ring-blue-primary"
                             : "border-gray-300",
                           "h-4 w-4 rounded border-gray-300 text-blue-primary focus:ring-blue-primary"
@@ -341,32 +359,34 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
               </fieldset>
 
               {/* Location Input */}
-              <div className=" w-full">
-                <label
-                  htmlFor="location"
-                  className="block text-sm font-medium leading-6 text-gray-900"
-                >
-                  Location (if physical appointment)
-                </label>
-                <div className="mt-2 w-full">
-                  <input
-                    type="text"
-                    name="location"
-                    id="location"
-                    placeholder="Address"
-                    onChange={(e) =>
-                      setFormResponse({
-                        ...formResponse,
-                        appointmentData: {
-                          ...formResponse.appointmentData,
-                          location: e.target.value,
-                        },
-                      })
-                    }
-                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-primary sm:text-sm sm:leading-6"
-                  />
+              {formResponse.appointmentData?.type === "PHYSICAL" && (
+                <div className=" w-full">
+                  <label
+                    htmlFor="location"
+                    className="block text-sm font-medium leading-6 text-gray-900"
+                  >
+                    Location (if physical appointment)
+                  </label>
+                  <div className="mt-2 w-full">
+                    <input
+                      type="text"
+                      name="location"
+                      id="location"
+                      placeholder="Address"
+                      onChange={(e) =>
+                        setFormResponse({
+                          ...formResponse,
+                          appointmentData: {
+                            ...formResponse.appointmentData,
+                            location: e.target.value,
+                          },
+                        })
+                      }
+                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-primary sm:text-sm sm:leading-6"
+                    />
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         </div>

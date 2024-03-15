@@ -10,13 +10,7 @@ export default async function handler(
   if (req.method === "PUT") {
     // Change method to PUT for update operation
     // Extract data from the request body
-    const {
-      appointmentId,
-      vendorName,
-      buyerName,
-      companyName,
-      appointmentData,
-    } = req.body;
+    const { vendorName, buyerName, companyName, appointmentData } = req.body;
 
     try {
       // Update the vendor if provided, or create a new one if not provided
@@ -39,46 +33,9 @@ export default async function handler(
         });
       }
 
-      // Check for time conflicts
-      const overlappingAppointments = await prisma.appointment.findMany({
-        where: {
-          OR: [
-            {
-              // Check if the appointment starts during an existing appointment
-              AND: [
-                { startTime: { lte: appointmentData.startTime } },
-                { endTime: { gt: appointmentData.startTime } },
-              ],
-            },
-            {
-              // Check if the appointment ends during an existing appointment
-              AND: [
-                { startTime: { lt: appointmentData.endTime } },
-                { endTime: { gte: appointmentData.endTime } },
-              ],
-            },
-            {
-              // Check if the appointment fully encompasses an existing appointment
-              AND: [
-                { startTime: { gte: appointmentData.startTime } },
-                { endTime: { lte: appointmentData.endTime } },
-              ],
-            },
-          ],
-          NOT: {
-            id: { equals: appointmentId }, // Exclude the current appointment if updating
-          },
-        },
-      });
-
-      if (overlappingAppointments.length > 0) {
-        // Conflict found, throw an error
-        throw new Error("Time conflict with existing appointments");
-      }
-
       // Update the appointment
       const updatedAppointment = await prisma.appointment.update({
-        where: { id: appointmentId },
+        where: { id: appointmentData.id },
         data: {
           title: appointmentData.title,
           type: appointmentData.type,

@@ -22,8 +22,23 @@ const AppointmentList: React.FC<ListProps> = ({
   const [appointmentId, setAppointmentId] = useState<number | null>(null);
   const [initialData, setInitialData] = useState(null);
 
-  const handleUpdate = (appointment: Appointment) => {
-    setInitialData(appointment); // to populate the data in the appointment form
+  // TODO: To improve the way we rely on the data structure and avoid manipulating the data so many times
+  const handleUpdate = async (appointment: Appointment) => {
+    const refinedAppointment = {
+      vendorName: appointment.vendorName,
+      buyerName: appointment.buyerName,
+      companyName: appointment.companyName,
+      appointmentData: {
+        id: appointment.id,
+        title: appointment.title,
+        type: appointment.type,
+        location: appointment.location,
+        startTime: appointment.startTime,
+        endTime: appointment.endTime,
+      },
+    };
+
+    setInitialData(refinedAppointment); // to populate the data in the appointment form
     setIsFormOpen(true); // to open modal with the appointment form
   };
 

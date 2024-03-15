@@ -18,14 +18,14 @@ datasource db {
 // Define the Vendor model
 model Vendor {
   id          Int          @id @default(autoincrement())
-  name        String
+  name        String       @unique
   appointments Appointment[] // Add the opposite relation field
 }
 
 // Define the Buyer model
 model Buyer {
   id          Int          @id @default(autoincrement())
-  name        String
+  name        String       @unique
   companyName String
   appointments Appointment[]
 }

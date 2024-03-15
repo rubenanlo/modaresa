@@ -8,8 +8,7 @@ export const useDatePicker = (
   setFormResponse: React.Dispatch<React.SetStateAction<FormResponse>>
 ): void => {
   useEffect(() => {
-    let endPicker: flatpickr.Instance | undefined;
-
+    // Initialize start date picker
     const startPicker = flatpickr(startDateTimeRef.current!, {
       enableTime: true,
       dateFormat: "Y-m-d  |  H:i",
@@ -23,26 +22,35 @@ export const useDatePicker = (
             appointmentData: {
               ...prevResponse.appointmentData,
               startTime: startDate.toISOString(),
-              endTime: endDate.toISOString(), // Set endTime in your form state here
+              // Optionally update endTime here
             },
           }));
+        }
+      },
+    });
 
-          if (endPicker) {
-            endPicker.setDate(endDate, false);
-          } else {
-            endPicker = flatpickr(endDateTimeRef.current!, {
-              enableTime: true,
-              dateFormat: "Y-m-d  |  H:i",
-              defaultDate: endDate,
-            });
-          }
+    // Initialize end date picker independently
+    const endPicker = flatpickr(endDateTimeRef.current!, {
+      enableTime: true,
+      dateFormat: "Y-m-d  |  H:i",
+      // Set a defaultDate only if it's a new appointment or logic requires
+      onChange: (selectedDates) => {
+        if (selectedDates[0]) {
+          const endDate = selectedDates[0];
+          setFormResponse((prevResponse) => ({
+            ...prevResponse,
+            appointmentData: {
+              ...prevResponse.appointmentData,
+              endTime: endDate.toISOString(),
+            },
+          }));
         }
       },
     });
 
     return () => {
       startPicker.destroy();
-      endPicker?.destroy();
+      endPicker.destroy();
     };
-  }, [startDateTimeRef, endDateTimeRef, setFormResponse]); // Include refs and setter in dependencies if their identities can change
+  }, [startDateTimeRef, endDateTimeRef, setFormResponse]);
 };

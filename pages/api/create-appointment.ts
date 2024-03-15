@@ -8,74 +8,54 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method === "POST") {
-    // Extract data from the request body
     const { vendorName, buyerName, companyName, appointmentData } = req.body;
 
     try {
-      // Create a new vendor with the provided name
-      const vendor = await prisma.vendor.create({
-        data: {
-          name: vendorName, // Add the name field
-        },
-      });
-
-      // Create a new buyer
-      const buyer = await prisma.buyer.create({
-        data: {
-          name: buyerName,
-          companyName,
-        },
-      });
-
-      // Check for time conflicts
-      const overlappingAppointments = await prisma.appointment.findMany({
+      // Check for an existing vendor
+      let vendor = await prisma.vendor.findUnique({
         where: {
-          OR: [
-            {
-              // Check if the appointment starts during an existing appointment
-              AND: [
-                { startTime: { lte: appointmentData.startTime } },
-                { endTime: { gt: appointmentData.startTime } },
-              ],
-            },
-            {
-              // Check if the appointment ends during an existing appointment
-              AND: [
-                { startTime: { lt: appointmentData.endTime } },
-                { endTime: { gte: appointmentData.endTime } },
-              ],
-            },
-            {
-              // Check if the appointment fully encompasses an existing appointment
-              AND: [
-                { startTime: { gte: appointmentData.startTime } },
-                { endTime: { lte: appointmentData.endTime } },
-              ],
-            },
-          ],
-          NOT: {
-            id: { equals: appointmentData.id }, // Exclude the current appointment if updating
-          },
+          name: vendorName,
         },
       });
-
-      if (overlappingAppointments.length > 0) {
-        // Conflict found, throw an error
-        throw new Error("Time conflict with existing appointments");
+      if (!vendor) {
+        // Create a new vendor if it doesn't exist
+        vendor = await prisma.vendor.create({
+          data: {
+            name: vendorName,
+          },
+        });
       }
 
-      // Create a new appointment
+      // Check for an existing buyer
+      let buyer = await prisma.buyer.findUnique({
+        where: {
+          name: buyerName,
+        },
+      });
+      if (!buyer) {
+        // Create a new buyer if it doesn't exist
+        buyer = await prisma.buyer.create({
+          data: {
+            name: buyerName,
+            companyName,
+          },
+        });
+      }
+
+      // Create the appointment with references to the vendor and buyer
       const appointment = await prisma.appointment.create({
         data: {
+          // Appointment data
           title: appointmentData.title,
           type: appointmentData.type,
           location: appointmentData.location,
           startTime: appointmentData.startTime,
           endTime: appointmentData.endTime,
-          vendorId: vendor.id, // Use the ID of the created vendor
-          buyerId: buyer.id, // Use the ID of the created buyer
+          vendorId: vendor.id,
+          buyerId: buyer.id,
         },
       });
+
       res.status(201).json({ appointment, vendor, buyer });
     } catch (error) {
       console.error(error);
