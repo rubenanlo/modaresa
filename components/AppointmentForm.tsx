@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from "react";
-import flatpickr from "flatpickr";
 import { observer } from "mobx-react-lite";
 import "flatpickr/dist/flatpickr.min.css"; // Import Flatpickr CSS
 import clsx from "clsx";
@@ -8,6 +7,7 @@ import { PlusIcon } from "./PlusIcon";
 import { Button } from "./Button";
 import { useDataStore } from "../providers/dataStore";
 import { FormResponse } from "../library/Interface";
+import { useDatePicker } from "../helpers/useDatePicker";
 
 interface AppointmentFormProps {
   setIsFormOpen: (isOpen: boolean) => void;
@@ -25,49 +25,10 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
     initialFormData || {}
   ); // Set initial form data if provided for appointment updates
 
+  // Logic to handle the date picker UI
   const startDateTimeRef = useRef(null);
   const endDateTimeRef = useRef(null);
-
-  useEffect(() => {
-    let endPicker; // Define outside to check if it's already initialized
-
-    const startPicker = flatpickr(startDateTimeRef.current, {
-      enableTime: true,
-      dateFormat: "Y-m-d  |  H:i",
-      onChange: (selectedDates) => {
-        if (selectedDates[0]) {
-          const startDate = selectedDates[0];
-          const endDate = new Date(startDate.getTime() + 60 * 60 * 1000); // 1 hour later
-
-          setFormResponse((prevResponse) => ({
-            ...prevResponse,
-            appointmentData: {
-              ...prevResponse.appointmentData,
-              startTime: startDate.toISOString(),
-              endTime: endDate.toISOString(), // Set endTime in your form state here
-            },
-          }));
-
-          if (endPicker) {
-            // If endPicker is already initialized, just set its date
-            endPicker.setDate(endDate, false);
-          } else {
-            // Initialize endPicker if it hasn't been already
-            endPicker = flatpickr(endDateTimeRef.current, {
-              enableTime: true,
-              dateFormat: "Y-m-d H:i",
-              defaultDate: endDate,
-            });
-          }
-        }
-      },
-    });
-
-    return () => {
-      startPicker.destroy();
-      if (endPicker) endPicker.destroy();
-    };
-  }, []); // Removed dependency to ensure this effect runs once on component mount
+  useDatePicker(startDateTimeRef, endDateTimeRef, setFormResponse); // Use the useDatePicker hook
 
   const handleCancel = () => {
     setFormResponse({}); // Reset form response
@@ -261,7 +222,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                         type="text"
                         name="startTime"
                         id="startTime"
-                        className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                        className="block overflow-x-auto flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                         placeholder="Start Date & Time"
                         value={formResponse.startTime}
                         autoComplete="startDate"
@@ -295,7 +256,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                         type="text" // Change type to text for Flatpickr
                         name="startTime"
                         id="startTime"
-                        className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                        className="block overflow-x-auto  flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                         placeholder="Start Date & Time"
                         autoComplete="endTime"
                         // value={formResponse.startTime || formResponse.endTime}

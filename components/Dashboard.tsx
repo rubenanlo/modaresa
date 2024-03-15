@@ -32,12 +32,14 @@ const Dashboard: React.FC<DashboardProps> = ({ state }) => {
 
   // UseEffect set up to re-fetch data from the database once a new form is submitted:
   useEffect(() => {
-    setIsLoading(true); // Set loading state to true before fetching data
     const fetchData = async () => {
-      await fetchAppointments("/api/find-appointments", setAppointments);
+      await fetchAppointments(
+        "/api/find-appointments",
+        setAppointments,
+        setIsLoading
+      );
     };
     fetchData();
-    setIsLoading(false); // so that the FirstAppointment component doesn't render when submitting the first form
     // eslint-disable-next-line
   }, [refreshTrigger]);
 

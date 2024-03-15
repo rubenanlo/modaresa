@@ -3,9 +3,13 @@ import { Appointment } from "../library/Interface";
 
 export const fetchAppointments = async (
   url: string,
-  setAppointments?: React.Dispatch<React.SetStateAction<Appointment[]>>
+  setAppointments?: React.Dispatch<React.SetStateAction<Appointment[]>>,
+  setIsLoading?: React.Dispatch<React.SetStateAction<boolean>>
 ): Promise<Appointment[]> => {
   try {
+    if (setIsLoading) {
+      setIsLoading(true); // Set loading state to true before fetching data
+    }
     const response = await fetch(url); // Use the API endpoint directly from the config
     if (!response.ok) {
       throw new Error("Failed to fetch appointments");
@@ -29,9 +33,12 @@ export const fetchAppointments = async (
       .sort((a, b) => b.startTime - a.startTime);
 
     // Set the fetched appointments in the state if provided
-    if (setAppointments) setAppointments(formattedData);
-
-    return formattedData; // Return the fetched appointments
+    if (setAppointments && setIsLoading) {
+      await setAppointments(formattedData);
+      setIsLoading(false); // Set loading state to false after fetching data
+    } else {
+      return formattedData;
+    } // Return the fetched appointments
   } catch (error) {
     console.error("Error fetching appointments:", error);
     // Throw the error to be handled by the caller
