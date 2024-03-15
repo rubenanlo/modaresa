@@ -7,13 +7,13 @@ import Hero from "./Hero";
 import { NavigationItem } from "../library/Interface";
 
 const navigation: NavigationItem[] = [
-  { name: "Appointments", href: "/", icon: CalendarIcon, current: true },
   {
     name: "Ruben Andino",
     href: "https://ruben-andino.rawdev.io",
     target: "_blank",
     icon: UserIcon,
   },
+  { name: "Appointments", href: "/", icon: CalendarIcon, current: true },
 ];
 
 // Define a type for the AppLayout's props

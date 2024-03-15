@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { Appointment } from "../library/Interface";
+import { Appointment, FormResponse } from "../library/Interface";
 
 export const fetchAppointments = async (
   url: string,
@@ -68,5 +68,46 @@ export const handleDelete = async (
   } catch (error) {
     console.error("Error deleting appointment:", error);
     alert("An error occurred while deleting the appointment.");
+  }
+};
+
+export const handleCreateEdit = async (
+  e: React.FormEvent<HTMLFormElement>,
+  formResponse: FormResponse,
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>,
+  setFormResponse: React.Dispatch<React.SetStateAction<FormResponse>>,
+  setIsFormOpen: React.Dispatch<React.SetStateAction<boolean>>,
+  setRefreshTrigger: () => void // Assuming this is a function with no parameters and no return value
+): Promise<void> => {
+  setIsLoading(true);
+  e.preventDefault();
+
+  const method = formResponse.appointmentId ? "PUT" : "POST";
+  const url = formResponse.appointmentId
+    ? `/api/update-appointment`
+    : `/api/create-appointment`;
+
+  try {
+    const response = await fetch(url, {
+      method,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formResponse),
+    });
+    const data = await response.json();
+
+    if (data.error) {
+      alert(data.error);
+      return;
+    }
+
+    // Reset or update state as needed
+    setFormResponse({});
+    setIsFormOpen(false);
+    setRefreshTrigger(); // Assuming this toggles a boolean state to refresh some data
+  } catch (error) {
+    console.error(error);
+    alert("An error occurred while saving the appointment.");
   }
 };

@@ -8,6 +8,7 @@ import { Button } from "./Button";
 import { useDataStore } from "../providers/dataStore";
 import { FormResponse } from "../library/Interface";
 import { useDatePicker } from "../helpers/useDatePicker";
+import { handleCreateEdit } from "../helpers/apiCalls";
 
 interface AppointmentFormProps {
   setIsFormOpen: (isOpen: boolean) => void;
@@ -30,41 +31,22 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
   const endDateTimeRef = useRef(null);
   useDatePicker(startDateTimeRef, endDateTimeRef, setFormResponse); // Use the useDatePicker hook
 
+  // Logic for either submission of the form or cancelling
   const handleCancel = () => {
     setFormResponse({}); // Reset form response
     setIsFormOpen(false);
     setInitialData && setInitialData(null); // Reset initial data
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    setIsLoading(true);
-    e.preventDefault();
-    const method = formResponse.appointmentId ? "PUT" : "POST"; // Determine method based on the presence of appointmentId
-    const url = formResponse.appointmentId
-      ? `/api/update-appointment`
-      : `/api/create-appointment`; // Set endpoint based on method
-
-    try {
-      const response = await fetch(url, {
-        method,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formResponse),
-      });
-      const data = await response.json();
-      if (data.error) {
-        alert(data.error);
-        return;
-      }
-      setFormResponse({});
-      setIsFormOpen(false);
-      setRefreshTrigger(); // Trigger refresh by toggling refreshTrigger
-    } catch (error) {
-      console.error(error);
-      alert("An error occurred while saving the appointment.");
-    }
-  };
+  const handleSubmit = (e) =>
+    handleCreateEdit(
+      e,
+      formResponse,
+      setIsLoading,
+      setFormResponse,
+      setIsFormOpen,
+      setRefreshTrigger
+    );
 
   return (
     <Container className="absolute top-0 left-0 h-screen w-screen z-50 bg-green-primary flex justify-center items-center">
