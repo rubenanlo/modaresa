@@ -32,6 +32,12 @@ CREATE TABLE "Appointment" (
     CONSTRAINT "Appointment_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateIndex
+CREATE UNIQUE INDEX "Vendor_name_key" ON "Vendor"("name");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Buyer_name_key" ON "Buyer"("name");
+
 -- AddForeignKey
 ALTER TABLE "Appointment" ADD CONSTRAINT "Appointment_vendorId_fkey" FOREIGN KEY ("vendorId") REFERENCES "Vendor"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 

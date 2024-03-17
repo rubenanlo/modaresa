@@ -3,30 +3,29 @@
 
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-// schema.prisma
 
-// Define the database connection
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
-
-// Define the Prisma Client generator
 generator client {
   provider = "prisma-client-js"
 }
 
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  shadowDatabaseUrl = env("DATABASE_URL")
+}
+
+
 // Define the Vendor model
 model Vendor {
   id          Int          @id @default(autoincrement())
-  name        String
+  name        String       @unique
   appointments Appointment[] // Add the opposite relation field
 }
 
 // Define the Buyer model
 model Buyer {
   id          Int          @id @default(autoincrement())
-  name        String
+  name        String       @unique
   companyName String
   appointments Appointment[]
 }

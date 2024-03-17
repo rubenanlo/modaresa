@@ -4,11 +4,11 @@
 export const TITLE = "";
 
 // The favicon
-export const ICON = "static/assets/logo.svg";
+export const ICON = "static/assets/logo.webp";
 
 // The URL of the deployed page (used in meta tags for SMO)
 // Example: https://www.domain.com/
-export const URL = "";
+export const URL = "http://localhost:3000";
 
 // The URL of the CV (Excel)
 // Example: /static/downloads/files/SDR2021-database.xlsx
