@@ -82,8 +82,8 @@ export const handleCreateEdit = async (
   setIsLoading(true);
   e.preventDefault();
 
-  const method = formResponse.appointmentData.id ? "PUT" : "POST";
-  const url = formResponse.appointmentData.id
+  const method = formResponse.appointmentData?.id ? "PUT" : "POST";
+  const url = formResponse.appointmentData?.id
     ? `/api/update-appointment`
     : `/api/create-appointment`;
 

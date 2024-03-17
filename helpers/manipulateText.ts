@@ -1,7 +1,7 @@
 // helper function used mainly to turn an object into a string. Useful for
 // combining tailwind object classes
 export const turnObjectIntoString = (
-  className: string | Record<string, string> | undefined
+  className: string | Record<string, string | boolean> | undefined
 ): string | undefined => {
   if (className === undefined) return;
   if (typeof className === "string") return className;

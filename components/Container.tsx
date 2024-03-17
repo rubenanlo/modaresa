@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 import { motion } from "framer-motion";
 import clsx from "clsx";
 import { turnObjectIntoString } from "../helpers/manipulateText";
@@ -16,7 +15,7 @@ export const Container: React.FC<ContainerProps> = ({
   className,
   ...props
 }: ContainerProps) => {
-  let Component = as ?? "div";
+  const Component = as ?? "div";
   const classNameProp = turnObjectIntoString(className);
 
   return (
@@ -45,14 +44,18 @@ export const AnimatedContainer: React.FC<AnimatedContainerProps> = ({
   );
 };
 
+interface ContainerSectionProps extends ContainerProps {
+  bottomDiv?: boolean;
+}
+
 Container.Section = function ContainerSection({
   children,
   className,
   as,
   bottomDiv,
   ...props
-}: React.ComponentPropsWithoutRef) {
-  let Component = as ?? "section";
+}: ContainerSectionProps) {
+  const Component = as ?? "section";
   const classNameProp = turnObjectIntoString(className);
 
   return (
@@ -107,85 +110,22 @@ Container.Flex = function ContainerFlexProps({
   );
 };
 
-interface ContainerLogoProps {
-  src: string;
-  alt: string;
-  className?: Record<string, string | boolean>;
-}
-
-Container.Logo = function ContainerLogo({
-  className,
-  ...props
-}: ContainerLogoProps) {
-  const classNameProp = turnObjectIntoString(className);
-
-  return (
-    <Image
-      className={clsx(classNameProp, "rounded-full")}
-      src={props.src}
-      alt={props.alt}
-    />
-  );
-};
-
-interface ContainerLinkProps {
-  children?: React.ReactNode;
-  text?: string;
-  className?: {
-    parent?: Record<string, string | boolean>;
-    child?: Record<string, string | boolean>;
-  };
-  href: string;
-  onClick?: () => void;
-  Component?: React.ElementType;
-  componentProps?: Record<string, any>;
-}
-
-Container.Link = function ContainerLink({
-  children,
-  text,
-  className,
-  href,
-  onClick,
-  Component,
-  componentProps,
-  ...props
-}: ContainerLinkProps) {
-  const classNameParent = turnObjectIntoString(className?.parent);
-  const classNameChild = turnObjectIntoString(className?.child);
-
-  return (
-    <Link
-      href={href}
-      className={clsx(classNameParent, "cursor-pointer")}
-      onClick={onClick}
-      {...props}
-    >
-      {Component && (
-        <Component
-          className={clsx(classNameChild, "w-auto h-6 fill-zinc-500")}
-          {...componentProps}
-        />
-      )}
-      {text || children}
-    </Link>
-  );
-};
-
 interface ContainerListProps {
   as?: { parent?: React.ElementType; child?: React.ElementType };
-  list: { id: string; [key: string]: any }[];
+  list: { id: string; [key: string]: string }[];
   className?: {
     parent?: Record<string, string | boolean>;
     child?: Record<string, string | boolean>;
   };
   AdditionalComponent?: React.ElementType;
+  currentBasis?: string;
 }
 
 Container.List = function ContainerList({
   as,
   list,
   className,
+  currentBasis,
   AdditionalComponent,
 }: ContainerListProps) {
   const ParentComponent = as?.parent ?? "ul";
@@ -202,7 +142,10 @@ Container.List = function ContainerList({
       {list.map((item) => (
         <ChildComponent
           key={item.id || item.name}
-          className={clsx(classNamePropChild)}
+          className={clsx(
+            classNamePropChild,
+            currentBasis === item.href && "bg-blue-primary text-white"
+          )}
         >
           {AdditionalComponent ? (
             <AdditionalComponent
@@ -219,60 +162,6 @@ Container.List = function ContainerList({
         </ChildComponent>
       ))}
     </ParentComponent>
-  );
-};
-
-interface ContainerTableProps {
-  table: { th: string[]; tr: { td: string[] }[] };
-  className?: {
-    table: Record<string, string | boolean>;
-    col: Record<string, string | boolean>;
-    thead: Record<string, string | boolean>;
-    tbody: Record<string, string | boolean>;
-  };
-}
-
-Container.Table = function ContainerTable({
-  table,
-  className,
-}: ContainerTableProps) {
-  return (
-    <table
-      className={clsx(
-        className.table,
-        "max-w-sm mx-auto whitespace-nowrap mb-5"
-      )}
-    >
-      <colgroup>
-        {table.th.map((header, index) => (
-          <col
-            key={header}
-            className={clsx(
-              className.col,
-              index === 0 ? className.col.first : className.col.rest
-            )}
-          />
-        ))}
-      </colgroup>
-      <thead className={clsx(className.thead, "text-sm")}>
-        <tr>
-          {table.th.map((header) => (
-            <th key={header} scope="col" className={clsx(className.th)}>
-              {header}
-            </th>
-          ))}
-        </tr>
-      </thead>
-      <tbody className={className.tbody}>
-        {table.tr.map((row, index) => (
-          <tr key={index}>
-            {row.td.map((cell, cellIndex) => (
-              <td key={cellIndex}>{cell}</td>
-            ))}
-          </tr>
-        ))}
-      </tbody>
-    </table>
   );
 };
 

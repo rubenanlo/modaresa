@@ -91,6 +91,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                         type="text"
                         name="vendorName"
                         id="vendorName"
+                        required
                         autoComplete="vendorName"
                         value={formResponse.vendorName || ""}
                         className="block flex-1 border-0 bg-transparent py-1.5 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
@@ -121,6 +122,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                         type="text"
                         name="buyerName"
                         id="buyerName"
+                        required
                         value={formResponse.buyerName || ""}
                         autoComplete="buyerName"
                         className="block flex-1 border-0 bg-transparent py-1.5 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
@@ -140,6 +142,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                         type="text"
                         name="companyName"
                         id="companyName"
+                        required
                         value={formResponse.companyName || ""}
                         autoComplete="companyName"
                         className="block flex-1 border-0 bg-transparent py-1.5 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
@@ -170,6 +173,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                   type="text"
                   name="title"
                   id="title"
+                  required
                   value={formResponse.appointmentData?.title || ""}
                   autoComplete="title"
                   placeholder="Include the title of the appointment"
@@ -214,6 +218,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                         type="text"
                         name="startTime"
                         id="startTime"
+                        required
                         className="block overflow-x-auto flex-1 border-0 bg-transparent py-1.5 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                         placeholder="Start Date & Time"
                         autoComplete="startDate"
@@ -254,6 +259,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                         type="text" // Change type to text for Flatpickr
                         name="startTime"
                         id="startTime"
+                        required
                         className="block overflow-x-auto  flex-1 border-0 bg-transparent py-1.5 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                         placeholder="End Date & Time"
                         autoComplete="endTime"
@@ -287,6 +293,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                         id="PHYSICAL"
                         name="type"
                         type="radio"
+                        required
                         value="PHYSICAL"
                         checked={
                           initialFormData &&
@@ -324,6 +331,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                         id="VIRTUAL"
                         name="type"
                         type="radio"
+                        required
                         value="VIRTUAL"
                         checked={
                           initialFormData &&

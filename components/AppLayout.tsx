@@ -1,4 +1,5 @@
 import { FC, ReactNode } from "react";
+import { useRouter } from "next/router";
 import { CalendarIcon, UserIcon } from "@heroicons/react/24/outline";
 import { Container } from "./Container";
 import Link from "next/link";
@@ -22,6 +23,8 @@ interface AppLayoutProps {
 }
 
 const AppLayout: FC<AppLayoutProps> = ({ children }) => {
+  const { route } = useRouter();
+
   return (
     <Container className="font-clash">
       {/* Static sidebar for desktop */}
@@ -52,6 +55,7 @@ const AppLayout: FC<AppLayoutProps> = ({ children }) => {
           <Container.List
             list={navigation}
             role="list"
+            currentBasis={route}
             className={{
               parent: "flex flex-1 flex-col gap-y-3",
               child:

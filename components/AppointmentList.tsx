@@ -44,7 +44,9 @@ const AppointmentList: React.FC<ListProps> = ({ appointments, state }) => {
   };
 
   return (
-    <Container.Columns className={{ dimension: "h-full", grid: "grid-cols-2" }}>
+    <Container.Columns
+      className={{ dimension: "h-full", grid: "grid-cols-1 sm:grid-cols-2" }}
+    >
       {/* Modals: */}
       {openDeleteModal && (
         <DeleteModal
