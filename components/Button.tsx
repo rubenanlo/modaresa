@@ -18,6 +18,12 @@ const variants = {
     typography: "text-gray-900",
     rounded: "rounded-md",
   },
+  secondary: {
+    dimension: "px-4 py-2",
+    background: "bg-blue-primary/60 hover:bg-blue-primary/70",
+    typography: "text-white",
+    rounded: "rounded-md",
+  },
   danger: {
     background: "bg-red-primary hover:bg-red-primary/90",
     dimension: "px-4 py-2",
