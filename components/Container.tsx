@@ -1,17 +1,19 @@
+import { StaticImageData } from "next/image";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import clsx from "clsx";
 import { turnObjectIntoString } from "../helpers/manipulateText";
+import { NavigationItem } from "../library/Interface";
 
 interface ContainerProps {
   children: React.ReactNode;
   as?: React.ElementType;
-  className?: Record<string, string | boolean>;
+  className?: string | Record<string, string | boolean>;
 }
 
 interface AnimatedContainerProps {
   children: React.ReactNode;
-  className?: Record<string, string | boolean>;
+  className?: string | Record<string, string | boolean>;
 }
 
 interface ContainerSectionProps extends ContainerProps {
@@ -24,19 +26,19 @@ interface ContainerFlexProps extends ContainerProps {}
 
 interface ContainerListProps {
   as?: { parent?: React.ElementType; child?: React.ElementType };
-  list: { id: string; [key: string]: string }[];
+  list: NavigationItem[];
   className?: {
-    parent?: Record<string, string | boolean>;
-    child?: Record<string, string | boolean>;
+    parent?: string | Record<string, string | boolean>;
+    child?: string | Record<string, string | boolean>;
   };
   AdditionalComponent?: React.ElementType;
   currentBasis?: string;
 }
 
 interface ContainerImageProps {
-  src: string;
+  src: string | StaticImageData;
   alt: string;
-  className?: Record<string, string | boolean>;
+  className?: string | Record<string, string | boolean>;
 }
 
 export const Container: React.FC<ContainerProps> & {

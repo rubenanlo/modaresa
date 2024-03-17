@@ -51,6 +51,7 @@ export interface State {
 }
 
 export type NavigationItem = {
+  id: string;
   name: string;
   href: string;
   target?: string;

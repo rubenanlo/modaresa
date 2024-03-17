@@ -9,18 +9,23 @@ import { NavigationItem } from "../library/Interface";
 
 const navigation: NavigationItem[] = [
   {
+    id: "ruben-andino",
     name: "Ruben Andino",
     href: "https://ruben-andino.rawdev.io",
     target: "_blank",
     icon: UserIcon,
   },
-  { name: "Appointments", href: "/", icon: CalendarIcon, current: true },
+  {
+    id: "appointments",
+    name: "Appointments",
+    href: "/",
+    icon: CalendarIcon,
+    current: true,
+  },
 ];
 
-// Define a type for the AppLayout's props
 interface AppLayoutProps {
   children: ReactNode;
-  className?: string;
 }
 
 const AppLayout: FC<AppLayoutProps> = ({ children }) => {
