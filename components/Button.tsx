@@ -8,7 +8,6 @@ interface ButtonProps {
   children?: React.ReactNode;
   href?: string;
   variant?: "primary" | "danger"; // Add type safety for variant
-  [key: string]: any;
 }
 
 const variants = {

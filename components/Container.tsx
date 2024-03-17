@@ -9,26 +9,51 @@ interface ContainerProps {
   className?: Record<string, string | boolean>;
 }
 
-export const Container: React.FC<ContainerProps> = ({
-  children,
-  as,
-  className,
-  ...props
-}: ContainerProps) => {
-  const Component = as ?? "div";
-  const classNameProp = turnObjectIntoString(className);
+interface AnimatedContainerProps {
+  children: React.ReactNode;
+  className?: Record<string, string | boolean>;
+}
 
+interface ContainerSectionProps extends ContainerProps {
+  bottomDiv?: boolean;
+}
+
+interface ContainerColumnsProps extends ContainerProps {}
+
+interface ContainerFlexProps extends ContainerProps {}
+
+interface ContainerListProps {
+  as?: { parent?: React.ElementType; child?: React.ElementType };
+  list: { id: string; [key: string]: string }[];
+  className?: {
+    parent?: Record<string, string | boolean>;
+    child?: Record<string, string | boolean>;
+  };
+  AdditionalComponent?: React.ElementType;
+  currentBasis?: string;
+}
+
+interface ContainerImageProps {
+  src: string;
+  alt: string;
+  className?: Record<string, string | boolean>;
+}
+
+export const Container: React.FC<ContainerProps> & {
+  Section: React.FC<ContainerSectionProps>;
+  Columns: React.FC<ContainerColumnsProps>;
+  Flex: React.FC<ContainerFlexProps>;
+  List: React.FC<ContainerListProps>;
+  Image: React.FC<ContainerImageProps>;
+} = ({ children, as = "div", className, ...props }) => {
+  const Component = as;
+  const classNameProp = turnObjectIntoString(className);
   return (
     <Component className={clsx(classNameProp)} {...props}>
       {children}
     </Component>
   );
 };
-
-interface AnimatedContainerProps {
-  children: React.ReactNode;
-  className?: Record<string, string | boolean>;
-}
 
 export const AnimatedContainer: React.FC<AnimatedContainerProps> = ({
   children,
@@ -43,10 +68,6 @@ export const AnimatedContainer: React.FC<AnimatedContainerProps> = ({
     </motion.div>
   );
 };
-
-interface ContainerSectionProps extends ContainerProps {
-  bottomDiv?: boolean;
-}
 
 Container.Section = function ContainerSection({
   children,
@@ -72,8 +93,6 @@ Container.Section = function ContainerSection({
   );
 };
 
-interface ContainerColumnsProps extends ContainerProps {}
-
 Container.Columns = function ContainerColumns({
   children,
   className,
@@ -86,8 +105,6 @@ Container.Columns = function ContainerColumns({
     </div>
   );
 };
-
-interface ContainerFlexProps extends ContainerProps {}
 
 Container.Flex = function ContainerFlexProps({
   children,
@@ -109,17 +126,6 @@ Container.Flex = function ContainerFlexProps({
     </div>
   );
 };
-
-interface ContainerListProps {
-  as?: { parent?: React.ElementType; child?: React.ElementType };
-  list: { id: string; [key: string]: string }[];
-  className?: {
-    parent?: Record<string, string | boolean>;
-    child?: Record<string, string | boolean>;
-  };
-  AdditionalComponent?: React.ElementType;
-  currentBasis?: string;
-}
 
 Container.List = function ContainerList({
   as,
@@ -153,7 +159,7 @@ Container.List = function ContainerList({
               target={item.target || ""}
               className="flex gap-x-2"
             >
-              {<item.icon className="h-6 w-6 shrink-0" /> || null}
+              <div className="h-6 w-6 shrink-0">{<item.icon /> || null}</div>
               <p>{item.name || ""}</p>
             </AdditionalComponent>
           ) : (
@@ -164,12 +170,6 @@ Container.List = function ContainerList({
     </ParentComponent>
   );
 };
-
-interface ContainerImageProps {
-  src: string;
-  alt: string;
-  className?: Record<string, string | boolean>;
-}
 
 Container.Image = function ContainerImage({
   src,

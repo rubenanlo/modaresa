@@ -20,6 +20,7 @@ const navigation: NavigationItem[] = [
 // Define a type for the AppLayout's props
 interface AppLayoutProps {
   children: ReactNode;
+  className?: string;
 }
 
 const AppLayout: FC<AppLayoutProps> = ({ children }) => {

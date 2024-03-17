@@ -2,7 +2,6 @@ import { useState, useRef } from "react";
 import { observer } from "mobx-react-lite";
 import "flatpickr/dist/flatpickr.min.css"; // Import Flatpickr CSS
 import dayjs from "dayjs";
-import clsx from "clsx";
 import { Container } from "./Container";
 import { PlusIcon } from "./PlusIcon";
 import { Button } from "./Button";
