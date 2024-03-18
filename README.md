@@ -11,9 +11,9 @@ Welcome to ModaResa new appointment schedule system. In this app you will be abl
 
 Future features:
 
-[x] Handle scheduling conflicts: This app will be able to identify an conflicts that either the vendor or the buyer may have. Thus, we expect the AppointmentForm component to read all the buyers' and vendors' appointments, to cross reference the appointment that is being selected in the front end.
-[] Filtering the list of appointments by a specific date, or a month.
-[] Filtering the list of appointments by vendors or buyers.
+- [ ] Handle scheduling conflicts: This app will be able to identify an conflicts that either the vendor or the buyer may have. Thus, we expect the AppointmentForm component to read all the buyers' and vendors' appointments, to cross reference the appointment that is being selected in the front end.
+- [ ] Filtering the list of appointments by a specific date, or a month.
+- [ ] Filtering the list of appointments by vendors or buyers.
 
 # How to set it up
 
