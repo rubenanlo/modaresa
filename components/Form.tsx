@@ -65,13 +65,13 @@ Form.Field = function FormField({
           {item.showLabel && (
             <label
               htmlFor={item.placeholder}
-              className={turnObjectIntoString(className)}
+              className={turnObjectIntoString(className.label)}
             >
               {item.input}
             </label>
           )}
           {item.InBetweenComponent}
-          <div className={turnObjectIntoString(className)}>
+          <div className={turnObjectIntoString(className.input.container)}>
             <input
               ref={item.ref}
               type={item.type}
@@ -82,7 +82,7 @@ Form.Field = function FormField({
               placeholder={item.placeholder}
               value={item.value}
               checked={item.current}
-              className={turnObjectIntoString(className)}
+              className={turnObjectIntoString(className.input.inputField)}
               onChange={item.onChange}
               {...props} // Spread the rest of the input props
             />
@@ -90,36 +90,5 @@ Form.Field = function FormField({
         </div>
       ))}
     </>
-  );
-};
-
-// Interface for the FormCheckboxProps
-interface FormCheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
-  field: string;
-  text?: string;
-}
-
-// The FormCheckbox component
-Form.Checkbox = function FormCheckbox({
-  field,
-  text,
-  ...props
-}: FormCheckboxProps) {
-  return (
-    <div className="flex items-center">
-      <input
-        id={field}
-        name={field}
-        type="checkbox"
-        className="h-4 w-4 rounded border-gray-300"
-        {...props}
-      />
-      <label
-        htmlFor={field}
-        className="ml-3 block text-sm leading-6 text-zinc-500 dark:text-orange-tertiary"
-      >
-        {text}
-      </label>
-    </div>
   );
 };
