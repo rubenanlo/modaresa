@@ -1,16 +1,16 @@
 import { useState, useRef } from "react";
 import { observer } from "mobx-react-lite";
 import "flatpickr/dist/flatpickr.min.css"; // Import Flatpickr CSS
-import dayjs from "dayjs";
 import { Container } from "./Container";
 import { PlusIcon } from "./PlusIcon";
-import { Button } from "./Button";
-import { useDataStore } from "../providers/dataStore";
-import { FormResponse } from "../library/Interface";
-import { useDatePicker } from "../helpers/useDatePicker";
-import { handleCreateEdit } from "../helpers/apiCalls";
 import { Form } from "./Form";
 import TextLayout from "./TextLayout";
+import { Button } from "./Button";
+import { useDatePicker } from "../helpers/useDatePicker";
+import { handleCreateEdit } from "../helpers/apiCalls";
+import { FormResponse } from "../library/Interface";
+import { useDataStore } from "../providers/dataStore";
+import { setSections } from "../library/form";
 
 interface AppointmentFormProps {
   setIsFormOpen: (isOpen: boolean) => void;
@@ -49,207 +49,12 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
       setRefreshTrigger
     );
 
-  // Define the form sections for maintaining the form state. Easy to add or
-  // remove sections
-  const sections = {
-    header: {
-      title: "Appointment",
-      description:
-        "Save all the relevant information for your next appointment",
-    },
-    people: [
-      {
-        id: "Vendor",
-        inputs: [
-          {
-            input: "Vendor",
-            showLabel: true,
-            placeholder: "Name",
-            type: "text",
-            required: true,
-            value: formResponse.vendorName,
-            onChange: (e) =>
-              setFormResponse({
-                ...formResponse,
-                vendorName: e.target.value,
-              }),
-          },
-        ],
-      },
-      {
-        id: "Buyer",
-        inputs: [
-          {
-            input: "Buyer",
-            placeholder: "Name",
-            showLabel: true,
-            type: "text",
-            required: true,
-            value: formResponse.buyerName,
-            onChange: (e) =>
-              setFormResponse({
-                ...formResponse,
-                buyerName: e.target.value,
-              }),
-          },
-          {
-            input: "Company name",
-            placeholder: "Company name",
-            type: "text",
-            required: true,
-            value: formResponse.companyName,
-            onChange: (e) =>
-              setFormResponse({
-                ...formResponse,
-                companyName: e.target.value,
-              }),
-          },
-        ],
-        placeholder: ["Name", "Company name"],
-      },
-    ],
-    text: [
-      {
-        id: "Title",
-        inputs: [
-          {
-            input: "Title",
-            showLabel: true,
-            placeholder: "Include the title of the appointment",
-            type: "text",
-            required: true,
-            value: formResponse.appointmentData?.title,
-            onChange: (e) =>
-              setFormResponse({
-                ...formResponse,
-                appointmentData: {
-                  ...formResponse.appointmentData,
-                  title: e.target.value,
-                },
-              }),
-          },
-        ],
-        placeholder: ["Include the title of the appointment"],
-      },
-    ],
-    date: [
-      {
-        id: "Time",
-        inputs: [
-          {
-            input: "Starting date & time",
-            showLabel: true,
-            ref: startDateTimeRef,
-            placeholder: "Start Date & Time",
-            type: "text",
-            required: true,
-            // value: formResponse.appointmentData?.startTime,
-            InBetweenComponent: formResponse.appointmentData?.startTime && (
-              <p className="text-xs">
-                {dayjs(formResponse.appointmentData?.startTime).format(
-                  "MMMM D, YYYY | h:mm A"
-                )}
-              </p>
-            ),
-
-            onChange: (e) =>
-              setFormResponse({
-                ...formResponse,
-                appointmentData: {
-                  ...formResponse.appointmentData,
-                  startTime: new Date(e.target.value).toISOString(),
-                },
-              }),
-          },
-          {
-            input: "Ending date & time",
-            showLabel: true,
-            ref: endDateTimeRef,
-            placeholder: "End Date & Time",
-            type: "text",
-            required: true,
-            // value: formResponse.appointmentData?.endTime,
-            InBetweenComponent: formResponse.appointmentData?.endTime && (
-              <p className="text-xs">
-                {dayjs(formResponse.appointmentData?.endTime).format(
-                  "MMMM D, YYYY | h:mm A"
-                )}
-              </p>
-            ),
-            onChange: (e) =>
-              setFormResponse({
-                ...formResponse,
-                appointmentData: {
-                  ...formResponse.appointmentData,
-                  endTime: new Date(e.target.value).toISOString(),
-                },
-              }),
-          },
-        ],
-      },
-    ],
-    type: {
-      legend: "Type of appointment",
-      inputs: [
-        {
-          input: "PHYSICAL",
-          name: "selection", // Add name for radio inputs so that the required attribute works for the entire section
-          type: "radio",
-          showLabel: true,
-          required: true,
-          value: "PHYSICAL",
-          current: formResponse.appointmentData?.type === "PHYSICAL",
-          onChange: (e) =>
-            setFormResponse({
-              ...formResponse,
-              appointmentData: {
-                ...formResponse.appointmentData,
-                type: e.target.value,
-              },
-            }),
-        },
-        {
-          input: "VIRTUAL",
-          type: "radio",
-          name: "selection",
-          showLabel: true,
-          required: true,
-          value: "VIRTUAL",
-          current: formResponse.appointmentData?.type === "VIRTUAL",
-          onChange: (e) =>
-            setFormResponse({
-              ...formResponse,
-              appointmentData: {
-                ...formResponse.appointmentData,
-                type: e.target.value,
-              },
-            }),
-        },
-      ],
-    },
-    location: [
-      {
-        id: "Location",
-        inputs: [
-          {
-            input: "Location (if physical appointment)",
-            type: "text",
-            placeholder: "Address",
-            showLabel: true,
-            value: formResponse.appointmentData?.location,
-            onChange: (e) =>
-              setFormResponse({
-                ...formResponse,
-                appointmentData: {
-                  ...formResponse.appointmentData,
-                  location: e.target.value,
-                },
-              }),
-          },
-        ],
-      },
-    ],
-  };
+  const sections = setSections(
+    formResponse,
+    setFormResponse,
+    startDateTimeRef,
+    endDateTimeRef
+  );
 
   return (
     <Container.Flex
@@ -305,7 +110,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                           "block text-sm font-medium leading-6 text-gray-900",
                         input: {
                           container:
-                            "mt-2 flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-blue-primary sm:max-w-md",
+                            "mt-2 flex rounded-sm shadow-sm ring-1 ring-inset ring-gray-400 focus-within:ring-2 focus-within:ring-inset focus-within:ring-blue-primary sm:max-w-md",
                           inputField:
                             "block flex-1 border-0 bg-transparent py-1.5 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6 overflow-x-auto",
                         },
@@ -327,7 +132,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                     input: {
                       container: "mt-2 w-full",
                       inputField:
-                        "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-primary sm:text-sm sm:leading-6",
+                        "block w-full rounded-sm border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-400 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-primary sm:text-sm sm:leading-6",
                     },
                   }}
                 />
@@ -348,7 +153,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                         "block text-sm font-medium leading-6 text-gray-900",
                       input: {
                         container:
-                          "mt-2 flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-blue-primary sm:max-w-md",
+                          "mt-2 flex rounded-sm shadow-sm ring-1 ring-inset ring-gray-400 focus-within:ring-2 focus-within:ring-inset focus-within:ring-blue-primary sm:max-w-md",
                         inputField:
                           "block overflow-x-auto flex-1 border-0 bg-transparent py-1.5 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6",
                       },
@@ -400,7 +205,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                       input: {
                         container: "mt-2 w-full",
                         inputField:
-                          "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-primary sm:text-sm sm:leading-6",
+                          "block w-full rounded-sm border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-400 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-primary sm:text-sm sm:leading-6",
                       },
                     }}
                   />
