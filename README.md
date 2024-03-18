@@ -1,21 +1,37 @@
-For a live version, please navigate to this link: https://calendar.rawdev.io
+![logo](/public/assets/logo.webp)
 
-Run NPM install to install all the NPM packages used in the application  
-Run NPM run dev to run the application on localhost.
+# Introduction
 
-Backend:
+Welcome to ModaResa new appointment schedule system. In this app you will be able to:
 
-- This application relies on prisma
-- Steps to connect your own database to this application (for this application, we relied on a Heroku database):
-  - Add in a .env file the following database url:
-    - if using an online database:
-      `DATABASE_URL="postgres://[USER]:[PASSWORD]@[CLUSTER]:[PORT]/[NAME OF DATABASE]?schema=public"`
-    - if using local database:
-      `DATABASE_URL="postgres://[USER]:[PASSWORD]@localhost:[PORT]/[NAME OF DATABASE]?schema=public"`
-  - Once you have that, run the following in the terminal
-  ```bash
-  npx prisma migrate dev --name init
-  npx prisma migrate deploy
-  ```
+- Create an appointment
+- Read a list of appointments
+- Update an appointment
+- Delete an appointment
 
-For any questions, do not hesitate to contact the creator of this app: info@rawdev.io
+Future features:
+
+[ ] Handle scheduling conflicts: This app will be able to identify an conflicts that either the vendor or the buyer may have. Thus, we expect the AppointmentForm component to read all the buyers' and vendors' appointments, to cross reference the appointment that is being selected in the front end.
+[ ] Filtering the list of appointments by a specific date, or a month.
+[ ] Filtering the list of appointments by vendors or buyers.
+
+# How to set it up
+
+Steps:
+
+1. Create a .env file in the root directory.
+2. Add the `DATABASE_URL` variable in that newly created file with on of the following two values:
+   - if using an online database:
+     `DATABASE_URL="postgres://[USER]:[PASSWORD]@[CLUSTER]:[PORT]/[NAME OF DATABASE]?schema=public"`
+   - if using local database:
+     `DATABASE_URL="postgres://[USER]:[PASSWORD]@localhost:[PORT]/[NAME OF DATABASE]?schema=public"`
+3. Run in the terminal the following commands (you can just copy from here and paste it in the terminal):
+
+```bash
+npx prisma migrate dev --name init
+npx prisma migrate deploy
+```
+
+And that's it! Now you are good to go to use this app.
+
+Any questions? Please feel free to reach out to me.
